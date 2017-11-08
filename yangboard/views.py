@@ -22,6 +22,8 @@ from datetime import datetime, timedelta
 
 from jchart import Chart
 from jchart.config import Axes, DataSet, rgba
+from django.contrib.staticfiles.templatetags.staticfiles import static
+
 
 class BarChart(Chart):
     chart_type = 'bar'
@@ -35,7 +37,7 @@ class BarChart(Chart):
     }
     
     options = {
-        'maintainAspectRatio': True
+        'maintainAspectRatio': False
     }
     
         

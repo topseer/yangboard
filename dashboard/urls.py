@@ -29,6 +29,10 @@ urlpatterns += [
 ]	
 
 urlpatterns += [
+    url(r'^', include('yangboard.urls')),
+]
+
+urlpatterns += [
     url(r'^yangboard/', include('yangboard.urls')),
 ]	
 
