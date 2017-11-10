@@ -27,7 +27,7 @@ def datatrend(user_email):
     	
     from AEPerformanceReport_1 as a    
     inner join topDownAELookupTable b on a.PersonID = b.PersonID 
-    WHERE a.Date >=   DATEADD(wk, DATEDIFF(wk,0,GETDATE()), 0) -2 -28*3 -7
+    WHERE a.Date >=   DATEADD(wk, DATEDIFF(wk,0,GETDATE()), 0) -2 -28*3 
     and   a.date <=  DATEADD(wk, DATEDIFF(wk,0,GETDATE()), 0)  -2 
     and b.Email = 'aaa@aaa.com'
     and b.WaterFallDivision in ('AVP','DM','WEB','TV','AIT - NFL Rookie','Digital - Router') 
@@ -38,7 +38,5 @@ def datatrend(user_email):
   query = query.replace('aaa@aaa.com',user_email)  
 
   queryResult = sql.read_sql(query, cnxn)
- 
-  return queryResult
 
- 
+  return queryResult 

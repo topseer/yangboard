@@ -24,46 +24,17 @@ from jchart import Chart
 from jchart.config import Axes, DataSet, rgba
 from django.contrib.staticfiles.templatetags.staticfiles import static
 
+from . import barcharts
+from . import ytd_data
+from . import AE_Pipeline
 
-class BarChart(Chart):
-    chart_type = 'bar'
-    scales = {
-        'xAxes': [Axes(display=True)],
-    }
-    
-    title = {
-        'text':'yang',
-        'display':'True',
-    }
-    
-    options = {
-        'maintainAspectRatio': False
-    }
-    
-        
-    def get_labels(self, **kwargs):
-        return ["January", "February", "March", "April",
-                "May", "June", "July"]
 
-    def get_datasets(self, **kwargs):
-        data = [10, 15, 29, 30, 5, 10, 22]
-        colors = [
-            rgba(255, 99, 132, 0.2),
-            rgba(54, 162, 235, 0.2),
-            rgba(255, 206, 86, 0.2),
-            rgba(75, 192, 192, 0.2),
-            rgba(153, 102, 255, 0.2),
-            rgba(255, 159, 64, 0.2)
-        ]
-        
+import locale
+locale.setlocale( locale.LC_ALL, '' )
 
-        return [DataSet(label='Bar Chart',
-                        data=data,
-                    #    height = 50,
-                        borderWidth=1,
-                        backgroundColor=colors,
-                        borderColor=colors)               
-        ]
+
+import json
+# ...
 
 
 def dashboard(request):
@@ -80,17 +51,35 @@ def dashboard(request):
         else:
             form = PeriodFilter(initial={'range': (date.today(), date.today())})
 
-        
+        #leads
         num_Router_lstWk= numOfLeads.numOfRouterCalls(from_date.strftime('%Y-%m-%d'), to_date.strftime('%Y-%m-%d'),user_email)
         num_Web_lstWk= numOfLeads.numOfWebLeads(from_date.strftime('%Y-%m-%d'), to_date.strftime('%Y-%m-%d'),user_email)
         numOfAOs= numOfLeads.numOfAOs(from_date.strftime('%Y-%m-%d'), to_date.strftime('%Y-%m-%d'),user_email)
         numOfIPs= numOfLeads.numOfIPs(from_date.strftime('%Y-%m-%d'), to_date.strftime('%Y-%m-%d'),user_email)
         numOfFunds= numOfLeads.numOfFunds(from_date.strftime('%Y-%m-%d'), to_date.strftime('%Y-%m-%d'),user_email)
         numOfPitch= numOfLeads.numOfPitch(from_date.strftime('%Y-%m-%d'), to_date.strftime('%Y-%m-%d'),user_email)
-        timeseries_data = datatrend.datatrend(user_email)
-            
-        timeseries_webLeads=timeseries_data[["StartOfWeek","WebLead"]]
-        timeseries_Router=timeseries_data[["StartOfWeek","RouterCall"]]     
+        
+        #charts of activity
+        rawdata = datatrend.datatrend(user_email)    
+        timeseries_webLeads =  rawdata["WebLead"]
+        timeseries_Router =rawdata["WebLead"]
+        ct_activity = barcharts. get_chart_recentActivity(rawdata)
+
+        #the top section
+        ytdData = ytd_data.get_ytdData (user_email)      
+        YTDQTR_CO = ytdData["YTDQTR_CO"][0].astype(int)
+        YTDQTR_CO_AMT =  locale.currency (ytdData["YTDQTR_CO_AMT"][0].astype(int), grouping=True )
+        YTDQTR_CO_AMT =  YTDQTR_CO_AMT [:-3]
+        CurrQTR_CO_AMT = locale.currency (ytdData["CurrQTR_CO_AMT"][0].astype(int), grouping = True)
+        CurrQTR_CO_AMT =  CurrQTR_CO_AMT [:-3]
+        lstQTR_CO_AMT = locale.currency (ytdData["lstQTR_CO_AMT"][0].astype(int), grouping = True)
+        lstQTR_CO_AMT = lstQTR_CO_AMT [:-3]
+        CO_CLose = ytdData["CO Close"][0].astype(int)
+        AE_Ranking = ytdData["Ranking"][0].astype(int)
+
+        #pipe
+        aePipeline = AE_Pipeline.get_AEPipeline(user_email)         
+        aePipeline_json = json.dumps(aePipeline)
 
         return render(request, 'dashboard.html',
                     context={'num_router_leads':num_Router_lstWk,'user_email':user_email,'form':form,
@@ -99,9 +88,17 @@ def dashboard(request):
                              'numOfIPs':numOfIPs,
                              'numOfFunds':numOfFunds,
                              'numOfPitch':numOfPitch ,                 
+                             'YTDQTR_CO':YTDQTR_CO ,     
+                             'YTDQTR_CO_AMT':YTDQTR_CO_AMT ,     
+                             'CurrQTR_CO_AMT':CurrQTR_CO_AMT ,     
+                             'lstQTR_CO_AMT':lstQTR_CO_AMT ,     
+                             'CO_CLose':CO_CLose ,     
+                             'AE_Ranking': AE_Ranking,
                              'timeseries_webLeads':timeseries_webLeads, 
                              'timeseries_Router':timeseries_Router ,
-                             'line_chart': BarChart()
+                             'line_chart': ct_activity,
+                             'aePipeline_js':aePipeline,
+                             'aePipeline_json':aePipeline_json
                             },
          ) 
     else:       

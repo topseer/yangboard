@@ -6,6 +6,8 @@
  *     // code here
  * });
  */
+
+
 (function($,sr){
     // debouncing function from John Hann
     // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
@@ -2577,9 +2579,25 @@ if (typeof NProgress != 'undefined') {
 				  scroller: true
 				});
 
-				$('#datatable-fixed-header').DataTable({
-				  fixedHeader: true
+			
+				/*
+			$(document).ready(function() {	
+			$('#datatable-fixed-header').DataTable({
+					fixedHeader: true,
+					data: aePipeData1,
+					columns: [
+            { title: "LoanNum" },
+            { title: "BorrName" },
+            { title: "LstSts" },
+            { title: "Sts Date" },
+            { title: "BorrPh" },
+						{ title: "LastCallTime" }
+					]
+
 				});
+			});
+			*/
+
 
 				var $datatable = $('#datatable-checkbox');
 
