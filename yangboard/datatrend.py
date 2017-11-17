@@ -9,9 +9,9 @@ def datatrend(user_email):
   password = 'Changeme1' 
   cnxn = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
   
-  query = """
-  
-    select dbo.StartOfWeek(date) StartOfWeek, a.PersonID,b.Employee_Code,b.FstNm,b.LstNm,b.WaterFallDivision,Team_Desc,b.Email,
+  query = """  
+    select convert(varchar,dbo.StartOfWeek(date),110) StartOfWeek,
+	       a.PersonID,b.Employee_Code,b.FstNm,b.LstNm,b.WaterFallDivision,Team_Desc,b.Email,
     	sum(case when [EventName] = 'Router Call' then 1 else 0 end) as [RouterCall] ,
     	sum(case when [EventName] = 'Transfer In' then 1 else 0 end) as [TransferIn] ,
     	sum(case when [EventName] = 'Transfer Out' then 1 else 0 end) as [TransferOut] ,
@@ -32,11 +32,19 @@ def datatrend(user_email):
     and b.Email = 'aaa@aaa.com'
     and b.WaterFallDivision in ('AVP','DM','WEB','TV','AIT - NFL Rookie','Digital - Router') 
     and b.ActiveCd = 'Y' and MarketingChannel not in ('IRRRL','Internal')
-    group by a.PersonID,b.Employee_Code,b.FstNm,b.LstNm,b.WaterFallDivision,Team_Desc,dbo.StartOfWeek(date) ,b.Email
-     
+    group by a.PersonID,b.Employee_Code,b.FstNm,b.LstNm,b.WaterFallDivision,Team_Desc, convert(varchar,dbo.StartOfWeek(date),110) ,b.Email
   """
   query = query.replace('aaa@aaa.com',user_email)  
 
   queryResult = sql.read_sql(query, cnxn)
-
+    
   return queryResult 
+
+if __name__ == "__main__":
+  user_email = 'yxu@newdayusa.com'
+  queryResult = datatrend (user_email)
+  
+   
+  
+
+ 

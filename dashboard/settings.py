@@ -125,3 +125,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/dashboard/'
+
+
+EMAIL_HOST      = 'newdayusa-com.mail.protection.outlook.com'
+#EMAIL_HOST_PASSWORD = 'my cpanel password'
+#EMAIL_HOST_USER = 'my cpanel user'
+EMAIL_PORT      = 25
+EMAIL_USE_TLS   = False
+DEFAULT_FROM_EMAIL  = 'LMReports@NewdayUSA.com'
+#SERVER_EMAIL    = 'root@my-domain.com'

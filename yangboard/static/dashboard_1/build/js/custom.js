@@ -2204,31 +2204,140 @@ if (typeof NProgress != 'undefined') {
 			  });
 			
 			}
+ 
+
+
+
+			// set default to straight lines - no curves
+			// Chart.defaults.global.elements.line.tension = 0;
+			// set default no fill beneath the line
+ 
+      //var LeadsVolume_Time= {{LeadsVolume_Time | safe}};
+      //var LeadsVolume_Projected= {{LeadsVolume_Projected | safe}};
+      //var LeadsVolume_Calls= {{LeadsVolume_Calls | safe}};
+      //var LeadsVolume_WebLeads= {{LeadsVolume_WebLeads | safe}};
+			//var LeadsVolume_TotalCalls= {{LeadsVolume_TotalCalls | safe}};     
+			
+						// stacked bar with 2 unstacked lines - nope
+						var barChartData_leadsVolume = {
+							labels: LeadsVolume_Time,
+							datasets: [
+								{
+									type: 'line',
+									label: 'Projected Calls',
+									yAxisID: "y-axis-1",
+									fill:false,
+									backgroundColor: "#32B92D",
+									borderColor: '#32B92D',
+									data: LeadsVolume_Projected
+								},
+								{
+								type: 'bar',
+								label: 'Total Calls',
+								yAxisID: "y-axis-0",
+								backgroundColor: "#004C70",
+								data: LeadsVolume_TotalCalls
+							}, {
+								type: 'bar',
+								label: 'Answered Calls',
+								yAxisID: "y-axis-0",
+								backgroundColor: "#0093D1",
+								data: LeadsVolume_Calls
+							}, {
+								type: 'bar',
+								label: 'Web Leads',
+								yAxisID: "y-axis-0",
+								backgroundColor: "#F2635F",
+								data:  LeadsVolume_WebLeads
+							}
+						]
+						};
+			
+			
+						var ctx = document.getElementById("barChart_leadsVolume").getContext("2d");						
+						// allocate and initialize a chart
+						var ch = new Chart(ctx, {
+							type: 'bar',
+							data: barChartData_leadsVolume,
+							options: {
+//								title: {
+//									display: true,
+//									text: "Chart.js Bar Chart - Stacked"
+//								},
+								tooltips: {
+									mode: 'label'
+								},
+								responsive: true,
+								scales: {
+									xAxes: [{
+										stacked: true
+									}],
+									yAxes: [{
+										stacked: true,
+										position: "left",
+										id: "y-axis-0",
+										ticks: {
+											beginAtZero: true,
+											//suggestedMax: 5800
+										}
+									}, {
+										display: false,
+										stacked: false,
+										position: "right",
+										id: "y-axis-1",
+										ticks: {
+											beginAtZero: true,
+											//suggestedMax: 5800
+										}
+									}]
+								}
+							}
+						});
+ 
+
+
+
+			//leads/ao/op/pitch activity chart
+			if ($('#activityChart').length ){ 
 				
-			  // Bar chart
-		   
-			if ($('#mybarChart').length ){ 
 				
-				
-				
-				var ctx = document.getElementById("mybarChart");0
-				ctx.height = 80;
-			  var mybarChart = new Chart(ctx, {
+				//var data1 = timeseries_totalLeads
+				//var timeseries_AOs = {{ timeseries_AOs }};
+				//var timeseries_opens = {{ timeseries_opens }};
+				//var timeseries_pitches = {{ timeseries_pitches }};
+				//var timeseries_tiemRange = {{ timeseries_tiemRange }};   
+
+				var ctx = document.getElementById("activityChart");
+				ctx.height = 60;
+			  var activityChart = new Chart(ctx, {
 				type: 'bar',
 				data: {
-				  labels: ["January", "February", "March", "April", "May", "June", "July"],
+					labels: timeseries_tiemRange,					
 				  datasets: [{
-					label: '# of Votes',
-					backgroundColor: "#26B99A",
-					data: [100, 30, 40, 28, 92, 50, 45]
+					label: '# Leads',
+					backgroundColor: "#004C70",
+					data: timeseries_totalLeads 
+					//data: [80, 30, 40, 28, 92, 50,80, 30, 40, 28, 92, 50, 45]
 					//data: {{ timeseries_webLeads }}
 				  }, {
-					label: '# of Votes',
-					backgroundColor: "#03586A",
-					data: [88, 56, 25, 48, 72, 34, 12]
-				  }]
-				},
-				
+					label: '# of Opens',
+					backgroundColor: "#0093D1",
+					data: timeseries_opens
+					//data: [80, 30, 40, 28, 92, 50,88, 56, 25, 48, 72, 34, 12]
+					}, {
+						label: '# of Pitches',
+						backgroundColor: "#F2635F",
+						data: timeseries_pitches
+						//data: [80, 30, 40, 28, 92, 50,88, 56, 25, 48, 72, 34, 12]
+						}
+						, {
+							label: '# of AOs',
+							backgroundColor: "#F4D00C",
+							data: timeseries_AOs
+							//data: [80, 30, 40, 28, 92, 50,88, 56, 25, 48, 72, 34, 12]
+							}
+				]},
+ 
 
 				options: {
 				  scales: {
@@ -2242,7 +2351,7 @@ if (typeof NProgress != 'undefined') {
 			  });
 			  
 			} 
-			  
+			  			
 
 			  // Doughnut chart
 			  
@@ -2288,35 +2397,51 @@ if (typeof NProgress != 'undefined') {
 			  // Radar chart
 			  
 			if ($('#canvasRadar').length ){ 
-			  
-			  var ctx = document.getElementById("canvasRadar");
+				
+				var options = {
+					responsive: true,
+					maintainAspectRatio: true,
+					scale: {
+							ticks: {
+									beginAtZero: true,
+									max: 150,
+									min: 0,																		
+							}
+					}, 
+				};
+				var ctx = document.getElementById("canvasRadar");
+				ctx.height = 205;
 			  var data = {
-				labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+				labels: ["Router Capture", "Router Close", "Web Capture", "Web Close", "Open to Pitch", "Pitch to Close" ],
 				datasets: [{
-				  label: "My First dataset",
-				  backgroundColor: "rgba(3, 88, 106, 0.2)",
-				  borderColor: "rgba(3, 88, 106, 0.80)",
-				  pointBorderColor: "rgba(3, 88, 106, 0.80)",
-				  pointBackgroundColor: "rgba(3, 88, 106, 0.80)",
+				  label: "My Efficiency",
+				  backgroundColor: "rgba(0, 102, 153, 0.2)",
+				  borderColor: "rgba(0, 102, 153, 0.80)",
+				  pointBorderColor: "rgba(0, 102, 153, 0.80)",
+				  pointBackgroundColor: "rgba(0, 102, 153, 0.80)",
 				  pointHoverBackgroundColor: "#fff",
 				  pointHoverBorderColor: "rgba(220,220,220,1)",
-				  data: [65, 59, 90, 81, 56, 55, 40]
+				  data: [RouterCapture13wk_Rel, RouterClose13wk_Rel, WebCapture13wk_Rel,  WebClose13wk_Rel, Open_to_pich_13wk_Rel, Pitch_to_AO_13wk_Rel]
 				}, {
-				  label: "My Second dataset",
-				  backgroundColor: "rgba(38, 185, 154, 0.2)",
-				  borderColor: "rgba(38, 185, 154, 0.85)",
-				  pointColor: "rgba(38, 185, 154, 0.85)",
+				  label: "Division's Avg",
+				  backgroundColor: "rgba(86, 186, 236, 0.5)",
+				  borderColor: "rgba(86, 186, 236, 0.5)",
+				  pointColor: "rgba(86, 186, 236, 0.5)",
 				  pointStrokeColor: "#fff",
-				  pointHighlightFill: "#fff",
-				  pointHighlightStroke: "rgba(151,187,205,1)",
-				  data: [28, 48, 40, 19, 96, 27, 100]
+					pointHighlightFill: "#fff",										
+				  pointHighlightStroke: "rgba(38,185,154,0.2)",
+					//data: [RouterCapture13wk_bm_Rel, WebCapture13wk_bm_Rel, RouterClose13wk_bm_Rel, WebClose13wk_bm_Rel, Open_to_pich_13wk_bm_Rel, Pitch_to_AO_13wk_bm_Rel]
+					data: [RouterCapture13wk_bm_Rel, RouterClose13wk_bm_Rel,WebCapture13wk_bm_Rel,  WebClose13wk_bm_Rel, Open_to_pich_13wk_bm_Rel, Pitch_to_AO_13wk_bm_Rel]
 				}]
 			  };
 
 			  var canvasRadar = new Chart(ctx, {
 				type: 'radar',
 				data: data,
-			  });
+				options: options				
+				});
+				
+				
 			
 			}
 			

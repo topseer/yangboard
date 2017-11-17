@@ -11,7 +11,8 @@ def get_AEPipeline(user_email):
   
   query = """  
 
-    select LoanNum,BorrName, LstStsDtCdDesc, convert(varchar, CurrentStsDate,110) CurrentStsDate,
+    select LoanNum,BorrName, LstStsDtCdDesc, convert(varchar, CurrentStsDate,110) CurrentStsDate, 
+		   datediff(DAY,CurrentStsDate,getdate()) as DaysInCurrentStatus,
 		   isnull(isnull(BorrPh,BorrMobilePh),' ') as BorrPh , 
 		   isnull(convert(varchar,LastCallTime,120),'NA') as LastCallTime
     from DashboardReport_LoanStatus_1
