@@ -1,0 +1,224 @@
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+                <!-- top tiles -->
+                <div class="row tile_count">
+                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-user"></i> Current Month Funded</span>
+                    <div class="count"> {{ CO_CLose }}</div>
+                    {% if CO_CLose_Diff > 0 %}                        
+                    <span class="count_bottom"><i class="green"> <i class="fa fa-sort-asc"></i> {{CO_CLose_Diff}}% </i> than Division Avg  </span>
+                    {% else %}
+                    <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i> {{CO_CLose_Diff}}% </i> than Division Avg </span>
+                    {% endif %}              
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-clock-o"></i> Current Qtr Funded Amt</span>
+                    <div class="count">{{ CurrQTR_CO_AMT }}</div>
+                    {% if CurrQTR_CO_AMT_Diff > 0 %}                        
+                    <span class="count_bottom"><i class="green"> <i class="fa fa-sort-asc"></i> {{CurrQTR_CO_AMT_Diff}}% </i> than Division Avg  </span>
+                    {% else %}
+                    <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i> {{CurrQTR_CO_AMT_Diff}}% </i> than Division Avg </span>
+                    {% endif %}     
+      
+                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{CurrQTR_CO_AMT_Diff }}</i> From last Week</span> -->
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-user"></i> Last Qtr Funded Amt</span>
+                    <div class="count">{{ lstQTR_CO_AMT }}</div>
+                    {% if lstQTR_CO_AMT_Diff > 0 %}                        
+                    <span class="count_bottom"><i class="green"> <i class="fa fa-sort-asc"></i> {{lstQTR_CO_AMT_Diff}}% </i> than Division Avg  </span>
+                    {% else %}
+                    <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i> {{lstQTR_CO_AMT_Diff}}% </i> than Division Avg </span>
+                    {% endif %}                   
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-user"></i> YTD Funded</span>
+                    <div class="count">{{ YTDQTR_CO }}</div>
+                    {% if YTDQTR_CO_Diff > 0 %}                        
+                    <span class="count_bottom"><i class="green"> <i class="fa fa-sort-asc"></i> {{YTDQTR_CO_Diff}}% </i> than Division Avg  </span>
+                    {% else %}
+                    <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i> {{YTDQTR_CO_Diff}}% </i> than Division Avg </span>
+                    {% endif %}                   
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-user"></i> YTD Funded Amt</span>
+                    <div class="count">{{ YTDQTR_CO_AMT }}</div>
+                    {% if YTDQTR_CO_AMT_Diff > 0 %}                        
+                    <span class="count_bottom"><i class="green"> <i class="fa fa-sort-asc"></i> {{YTDQTR_CO_AMT_Diff}}% </i> than Division Avg  </span>
+                    {% else %}
+                    <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i> {{YTDQTR_CO_AMT_Diff}}% </i> than Division Avg </span>
+                    {% endif %}                
+                  </div>
+                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-user"></i>Company(Division) Ranking </span>
+                    <div class="count green"># {{ AE_Ranking }} ({{ AE_Ranking_div }}) </div>
+                    {% if myDiff == 'You are the Number 1' %} 
+                    <span class="count_bottom"><i class="green"> {{myDiff}}</i></span>
+                    {% else %}
+                    <span class="count_bottom">Close<i class="green"> {{myDiff}}</i>&nbsp more loans to be # {{myRankHead}}</span>
+                    {% endif %}
+                  </div>
+                </div>
+                <!-- /top tiles -->
+                
+                <div class="row">
+                  
+                    <!--div class="dashboard_graph" -->
+                    
+                    <!--
+                      <div class="row x_title">            
+                        <h3>Yang, you are super!</h3>
+                      </div>
+                    !-->
+
+                      
+                     <!-- Loan # -->
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                          <div class="x_panel" >
+                            <div class="x_title">
+                                <div class="input-group">
+                                  <form action="" class="form-control" method="get" id="nameform111">
+                                    <input type="text"  name = "loanNumber" style="border:none"  size="30" placeholder="Loan Number...">                                                               
+                                  </form>
+                                  <span class="input-group-btn">
+                                      <button class="btn btn-default" form ="nameform111" type="submit">Go!</button>                                      
+                                  </span>   
+                                                                    
+                                </div>                                
+                              <div class="clearfix"></div>
+                            </div>
+                              <!--  {{ radar_efficiency.as_html }}-->                              
+                                <h4 class="name">  {{ my_loaninfo_fstnm }}&nbsp{{ my_loaninfo_lstnm }} </h4>                                                                                    
+                                <div class="flex">
+                                    <ul class="list-inline count2">
+                                      <li>
+                                        <h3>{{total_int_saved}}</h3>
+                                        <span>Int Saved</span>
+                                      </li>
+                                      <li>
+                                        <h3>{{lastPaymentYear}}</h3>
+                                        <span>Pay-Off Years</span>
+                                      </li>
+                              
+                                    </ul>
+                                </div>
+                                <div class="flex">
+                                    <ul class="list-inline count2">
+                                      <li>
+                                        <h3>{{total_int_saved}}</h3>
+                                        <span>Int Saved</span>
+                                      </li>                                    
+                                      <li>
+                                        <h3>{{erate2}}</h3>
+                                        <span>Equivalent Rate</span>
+                                      </li>
+                                    </ul>
+                                </div>                                
+                                <p>
+                                  The Analytics found when ABC happens, your capture rate will be doubled. 
+                                </p>
+
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <h2>Last 90 Days Activities --- 
+                                <medium style="color: #004C70 ">Leads,</medium>
+                                <medium style="color: #0093D1 ">Opens,</medium>
+                                <medium style="color: #F2635F ">Pitches,</medium>
+                                <medium style="color: #F4D00C ">AOs</medium>
+                            </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                              </li> 
+                              <li><a class="close-link"><i class="fa fa-close"></i></a>
+                              </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content" >                                            
+                            <canvas id="activityChart"></canvas> 
+                            <!--{{ line_chart.as_html }}  -->               
+                          </div>
+                        </div>
+                      </div>                      
+       
+       
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="x_panel" >
+                          <div class="x_title">
+                            <h2 style = "color: #006699 ">90 Day Efficiency V.S. &nbsp</h2> <h2 style = "color: #fc22349d ">Division Avg</h2>
+         
+                            
+                            <div class="clearfix"></div>
+                          </div>
+                          <!--  {{ radar_efficiency.as_html }}-->
+                          <canvas id="canvasRadar"></canvas> 
+                        </div>
+                      <div class="clearfix"></div>
+                    </div>
+                  <!-- </div> dashboard graph-->
+               
+              </br> 
+              
+              <div class="col-md-4 col-sm-12 col-xs-12">
+                  <!-- <div class="x_panel tile fixed_height_320">    -->
+                   <div class="x_panel">                  
+                       <div class="x_title">
+                         <h2>Last 90 Days Activities --- 
+                             <medium style="color: #004C70 ">Top20%,</medium>
+                             <medium style="color: #0093D1 ">Top50%,</medium>
+                             <medium style="color: #F2635F ">Myself</medium>
+                         </h2>
+                         <ul class="nav navbar-right panel_toolbox">
+                           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                           </li> 
+                           <li><a class="close-link"><i class="fa fa-close"></i></a>
+                           </li>
+                         </ul>
+                         <div class="clearfix"></div>
+                       </div>
+                       <div class="x_content" >                                            
+                         <canvas id="Myself_VS_DivAvg"></canvas> 
+                         <!--{{ line_chart.as_html }}  -->               
+                       </div>
+                   </div>    
+                 </div>
+       
+                 <div class="col-md-8 col-sm-12 col-xs-12">
+                     <div class="x_panel">
+                       <div class="x_title">
+                         <h2>Today's Leads Volume
+                             <small style="color: #32B92D ">Projected</small>                        
+                             <small style="color: #0093D1 ">Answered</small>
+                             <small style="color: #F2635F ">Missed</small>                        
+                         </h2>
+                         <ul class="nav navbar-right panel_toolbox">
+                           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                           </li>
+                           <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                             <ul class="dropdown-menu" role="menu">
+                               <li><a href="#">Settings 1</a>
+                               </li>
+                               <li><a href="#">Settings 2</a>
+                               </li>
+                             </ul>
+                           </li>
+                           <li><a class="close-link"><i class="fa fa-close"></i></a>
+                           </li>
+                         </ul>
+                         <div class="clearfix"></div>
+                       </div>
+                       <div class="x_content">
+                           <canvas id="barChart_leadsVolume"></canvas>
+       
+                       </div>
+                     </div>
+                 </div>              
+                 
+                 

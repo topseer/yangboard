@@ -1426,6 +1426,15 @@ td.details {
     background-color: #d1cfd0;
     border: 2px solid #A19B9E
 }
+
+td.details-control {
+    background: url('../resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../resources/details_close.png') no-repeat center center;
+}
+
 .example_alt_pagination div.dataTables_info {
     width: 40%
 }
@@ -2173,6 +2182,12 @@ span.section {
     border-radius: 0;
     width: 100%
 }
+
+.form-control-noBorder {    
+    border:none;    
+}
+
+
 .form-horizontal .control-label {
     padding-top: 8px
 }
@@ -4190,6 +4205,18 @@ ul.notifications {
 }
 
 
+#id_note_appointment {
+    width: 100px;    
+}
+
+#id_note_details {
+    width: 500px;
+    height: 75px;
+}
+
+#id_note_title {
+    width: 100px;    
+}
 
 
 /* CSS3 Checkbox */
@@ -4253,3 +4280,5 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     background-color: #ffff !important;
 }
 /** /bootstrap-datetimepicker **/
+
+ 

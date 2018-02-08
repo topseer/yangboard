@@ -26,7 +26,12 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^dashboard/', include('yangboard.urls')),    
+    url(r'^app_equivalentrate/', include('yangboard.urls')),    
+    url(r'^app_equivalentrate', include('yangboard.urls')),    
+    url(r'/myPipeline/', include('yangboard.urls')),    
 ]	
+
+
 
 urlpatterns += [
     url(r'^', include('yangboard.urls')),
@@ -38,7 +43,8 @@ urlpatterns += [
 
 urlpatterns += [
     url(r'^accounts/', include('django.contrib.auth.urls')),	
-	url(r'^dashboard/accounts/', include('django.contrib.auth.urls')),	    
+	 url(r'^dashboard/accounts/', include('django.contrib.auth.urls')),	    
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

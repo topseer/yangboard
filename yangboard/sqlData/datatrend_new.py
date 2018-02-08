@@ -1,8 +1,8 @@
 import pyodbc 
 import pandas.io.sql as sql
+import pandas as pd
 
-def datatrend(user_email):
-  #user_email = 'btaylor@newdayusa.com'
+def datatrend():  
   server = '10.203.1.105\\alpha' 
   database = 'test_yang' 
   username = 'webuser' 
@@ -10,8 +10,9 @@ def datatrend(user_email):
   cnxn = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
   
   query = """  
-    select convert(varchar,dbo.StartOfWeek(date),110) StartOfWeek,
-	       a.PersonID,b.Employee_Code,b.FstNm,b.LstNm,b.WaterFallDivision,Team_Desc,b.Email,
+	 select  convert(varchar, DATEADD(wk, DATEDIFF(wk,0,date), 0) -2,110) StartOfWeek,
+	       a.PersonID,b.Employee_Code,b.FstNm,b.LstNm,b.WaterFallDivision,Team_Desc,
+           lower(b.Email) Email,
     	sum(case when [EventName] = 'Router Call' then 1 else 0 end) as [RouterCall] ,
     	sum(case when [EventName] = 'Transfer In' then 1 else 0 end) as [TransferIn] ,
     	sum(case when [EventName] = 'Transfer Out' then 1 else 0 end) as [TransferOut] ,
@@ -27,24 +28,22 @@ def datatrend(user_email):
     	
     from AEPerformanceReport_1 as a    
     inner join topDownAELookupTable b on a.PersonID = b.PersonID 
-    WHERE a.Date >=   DATEADD(wk, DATEDIFF(wk,0,GETDATE()), 0) -2 -28*3 
-    and   a.date <=  DATEADD(wk, DATEDIFF(wk,0,GETDATE()), 0)  -2 
-    and b.Email = 'aaa@aaa.com'
+    WHERE a.Date >=   DATEADD(wk, DATEDIFF(wk,0,GETDATE()), 0) -2 -7*8 
+    and   a.date <=  DATEADD(wk, DATEDIFF(wk,0,GETDATE()), 0)  -2     
     and b.WaterFallDivision in ('AVP','DM','WEB','TV','AIT - NFL Rookie','Digital - Router') 
     and b.ActiveCd = 'Y' and MarketingChannel not in ('IRRRL','Internal')
-    group by a.PersonID,b.Employee_Code,b.FstNm,b.LstNm,b.WaterFallDivision,Team_Desc, convert(varchar,dbo.StartOfWeek(date),110) ,b.Email
+    group by a.PersonID,b.Employee_Code,b.FstNm,b.LstNm,b.WaterFallDivision,Team_Desc, convert(varchar, DATEADD(wk, DATEDIFF(wk,0,date), 0) -2,110) ,b.Email	
+    order by 2,1
   """
-  query = query.replace('aaa@aaa.com',user_email)  
+  
 
   queryResult = sql.read_sql(query, cnxn)
-    
+  
+  queryResult["StartOfWeek_Date"] =  pd.to_datetime(queryResult["StartOfWeek"])
+  
+  queryResult = queryResult.sort_values(["StartOfWeek_Date"])
+  
   return queryResult 
-
-if __name__ == "__main__":
-  user_email = 'yxu@newdayusa.com'
-  queryResult = datatrend (user_email)
-  
-   
-  
+ 
 
  

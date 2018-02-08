@@ -11,6 +11,7 @@ def get_LeadsVolume():
   
   query = """  
     select * from LeadsVolumeByTimeoftheDay
+    where time<='19:00'
   """
 
   queryResult = sql.read_sql(query, cnxn)

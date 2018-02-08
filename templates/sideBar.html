@@ -1,0 +1,53 @@
+ 
+{% block sidebar %}
+
+          <!-- sidebar menu -->
+          <div class="col-md-3 left_col">              
+              <div class="left_col scroll-view">
+                  <div class="clearfix"></div>                  
+                  <div class="profile clearfix">
+                        <div class="profile_pic">       
+                            {% load static %}             
+                            {% static "/dashboard_1/images/" as baseUrl %}
+                            <img src="{{ baseUrl }}{{img_url}}" class="img-circle profile_img"> 
+                        </div>
+                        <div class="profile_info">
+                            <span>Welcome,</span>                                    
+                            <h2>User: {{ user.get_username }}</h2>                  
+                        </div>
+                  </div>
+                  <br>                             
+                      
+                  <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                    <div class="menu_section">
+                            <ul class="nav side-menu">
+                            <li>
+                                <a><i class="fa fa-area-chart"></i>AE Reports<span class="fa fa-chevron-down"></span>
+                                </a>
+                                <ul class="nav child_menu">
+                                  <li><a href="/">Dashboard</a></li>
+                                  <li><a href="myPipeline/">myPipeline</a></li>
+                                  <li><a href="/dashboard3"> {{test_test}}</a></li>                       
+                                  <li><a href="/dashboard3"> {{test_123}}</a></li>    
+                                </ul>
+                            </li>                            
+                            {% if isAVP %}
+                            <li>
+                              <a><i class="fa fa-area-chart"></i>My Team<span class="fa fa-chevron-down"></span>
+                              </a>
+                              <ul class="nav child_menu">
+                                {% for name in myteam %}
+                                <li><a href="/dashboard/myteam/{{name.1}}">{{name.0}}</a></li>                          
+                                {% endfor %}
+                              </ul>
+                            </li>                                 
+                            {% endif %}
+                                
+                            </ul>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <!-- /sidebar menu -->
+
+{% endblock %}

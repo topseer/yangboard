@@ -2,7 +2,7 @@ import pyodbc
 import pandas.io.sql as sql
 
 def getEfficiency(user_email):
-  #user_email = 'btaylor@newdayusa.com'
+  #user_email = 'LSOGGE@newdayusa.com'
   server = '10.203.1.105\\alpha' 
   database = 'test_yang' 
   username = 'webuser' 

@@ -1,5 +1,6 @@
 import pyodbc 
 import pandas.io.sql as sql
+abcdef = "12345"
 
 def get_ytdranking(user_email):
   #user_email = 'btaylor@newdayusa.com'
@@ -73,6 +74,10 @@ def get_ytdranking(user_email):
   query = query.replace('aaa@aaa.com',user_email)  
 
   queryResult = sql.read_sql(query, cnxn)
-
-  return queryResult 
  
+  return queryResult 
+
+
+if __name__ == "__main__":
+    test = get_ytdranking("btaylor@newdayusa.com")
+    print (test)

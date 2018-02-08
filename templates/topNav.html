@@ -1,0 +1,46 @@
+{% block topNav %}
+<div class="top_nav">
+        <div class="nav_menu">
+          <nav>
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fa fa-bars"></i> </a>
+              
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+              
+
+              {% if user.is_authenticated %}
+              <li class="">
+                
+                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  
+                    {% load static %}             
+                    {% static "/dashboard_1/images/" as baseUrl %}
+                    <img src="{{ baseUrl }}{{img_url}}">                                       
+                    {{ user.get_username }}      
+
+                    <span class=" fa fa-angle-down"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-usermenu pull-right">                       
+                      <li><a href="{% url 'logout'%}?next={{request.path}}">Log out</a></li>                         
+                      <li><a href="{% url 'password_change'%}?next={{request.path}}">Change Password</a></li>                         
+                    </ul>
+                    
+                
+              </li>
+              {% endif %} 
+
+              <li role="presentation" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                  <a href="" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false"> 
+                    <i class="fa fa-thumbs-o-up"></i>                      
+                    {{ salesQuote|random }}                                                            
+                  </a>                   
+              </li>
+
+             
+            </ul>
+          </nav>
+        </div>
+</div>
+{% endblock %}

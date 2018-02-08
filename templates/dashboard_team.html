@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Newday USA Sales Dashboard</title>
+
+  
+
+    {% load static %} 
+    
+     <!--  <img src="{% static '/dashboard_1/images/img.jpg' %}" alt=""> --> 
+    <link rel="shortcut icon" type="image/x-icon" href="{% static '/dashboard_1/images/logo_small.png' %}" />
+
+    <!-- Bootstrap -->
+    <link href="{% static '/dashboard_1/bootstrap.min.css' %}"  rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{% static '/dashboard_1/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{% static '/dashboard_1/nprogress.css' %}" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="{% static '/dashboard_1/green.css' %}" rel="stylesheet">	
+    <!-- bootstrap-progressbar -->
+    <link href="{% static '/dashboard_1/bootstrap-progressbar-3.3.4.min.css' %}"  rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="{% static '/dashboard_1/jqvmap.min.css' %}"  rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static '/dashboard_1/daterangepicker.css' %}"  rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="{% static '/dashboard_1/build/css/custom.min.css' %}"  rel="stylesheet">
+
+    <!--Trust Pilot -->
+    <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+        
+    <!-- Include Required Prerequisites -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<!-- 
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" /> 
+-->
+     
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+  
+    <!-- Datatables -->
+    <link href="{% static '/dashboard_1/dataTables.bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static '/dashboard_1/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/dashboard_1/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/dashboard_1/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/dashboard_1/scroller.bootstrap.min.css' %}"  rel="stylesheet">
+    <script>
+      var timeseries_totalLeads = {{ timeseries_totalLeads }};
+      var timeseries_AOs = {{ timeseries_AOs }};
+      var timeseries_opens = {{ timeseries_opens }};
+      var timeseries_pitches = {{ timeseries_pitches }};      
+ 
+      var timeseries_tiemRange =  {{ timeseries_tiemRange | safe }}
+
+      var RouterCapture13wk_Rel= {{RouterCapture13wk_Rel}};
+      var WebCapture13wk_Rel= {{WebCapture13wk_Rel}};
+      var RouterClose13wk_Rel= {{RouterClose13wk_Rel}};
+      var WebClose13wk_Rel= {{WebClose13wk_Rel}};
+      var Open_to_pich_13wk_Rel= {{Open_to_pich_13wk_Rel}};
+      var Pitch_to_AO_13wk_Rel= {{Pitch_to_AO_13wk_Rel}};
+
+      var RouterCapture13wk_bm_Rel= {{RouterCapture13wk_bm_Rel}};
+      var WebCapture13wk_bm_Rel= {{WebCapture13wk_bm_Rel}};
+      var RouterClose13wk_bm_Rel= {{RouterClose13wk_bm_Rel}};
+      var WebClose13wk_bm_Rel= {{WebClose13wk_bm_Rel}};
+      var Open_to_pich_13wk_bm_Rel= {{Open_to_pich_13wk_bm_Rel}};
+      var Pitch_to_AO_13wk_bm_Rel= {{Pitch_to_AO_13wk_bm_Rel}};
+
+      var LeadsVolume_Time= {{LeadsVolume_Time | safe}};
+      var LeadsVolume_Projected= {{LeadsVolume_Projected | safe}};
+      var LeadsVolume_Calls= {{LeadsVolume_Calls | safe}};
+      var LeadsVolume_WebLeads= {{LeadsVolume_WebLeads | safe}};
+      var LeadsVolume_TotalCalls= {{LeadsVolume_TotalCalls | safe}};      
+ 
+    </script>     
+
+    <script>
+      var activity_top20 = {{activity_top20 | safe}}
+      var activity_top50 = {{activity_top50 | safe}}
+      var activity_myself = {{activity_myself | safe}} 
+    </script>
+    
+
+  </head>
+
+  <body class="nav-md">
+
+
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+          
+          <!--Title
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="" class="site_title"><i class="fa fa-paw"></i> 
+                <span>NewDay Report</span></a>
+            </div>
+          -->
+            <div class="clearfix"></div>                  
+              <div class="profile clearfix">
+                <div class="profile_pic">       
+                    {% load static %}             
+                    {% static "/dashboard_1/images/" as baseUrl %}
+                    <img src="{{ baseUrl }}{{img_url}}" class="img-circle profile_img"> 
+
+                   <!-- <img src="{% static '/dashboard_1/images/img.jpg' %}" alt="..." class="img-circle profile_img">
+                   -->
+
+                </div>
+                <div class="profile_info">
+                  <span>Welcome,</span>                                    
+                  <h2>User: {{ user.get_username }}</h2>
+                </div>
+              </div>
+              <br>               
+
+<!--              
+              <form id = "form_id" method="post" class="pull-mid" action ="." >                  
+                               
+                {% csrf_token %}
+                {{ form.as_p }}                
+                <button type='submit' class = "h3">Refresh</button>                                 
+              </form>                               
+-->               
+              
+            <!-- menu profile quick info  -->
+
+            <!-- /menu profile quick info -->
+ 
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-area-chart"></i>AE Reports<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="/">Dashboard</a></li>
+<!--                      <li><a href="/dashboard2">ABCReport - Pending</a></li> -->
+<!--                      <li><a href="/dashboard3">XYZReport - Pending</a></li> -->
+                      
+                    </ul>
+                  </li>
+                  
+                  {% if isAVP %}
+                  <li><a><i class="fa fa-area-chart"></i>My Team<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      {% for name in myteam %}
+                            <li><a href="/dashboard/myteam/{{name.1}}">{{name.0}}</a></li>
+                      {% endfor %}
+                    </ul>
+                  </li>                  
+ 
+                  {% endif %}
+                
+                </ul>
+              </div>
+              
+
+            </div>
+            <!-- /sidebar menu -->
+
+ 
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+  
+
+                {% if user.is_authenticated %}
+                <li class="">
+                  
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    
+                      {% load static %}             
+                      {% static "/dashboard_1/images/" as baseUrl %}
+                      <img src="{{ baseUrl }}{{img_url}}"> 
+  
+                  <!--  <img src="{% static '/dashboard_1/images/img.jpg' %}" alt=""> --> 
+                  
+                    {{ user.get_username }}      
+ 
+                      <span class=" fa fa-angle-down"></span>
+                      </a>
+                      <ul class="dropdown-menu dropdown-usermenu pull-right">
+                       <!--
+                        <li><a href="javascript:;"> Profile</a></li>
+                        <li>
+                          <a href="javascript:;">
+                            <span class="badge bg-red pull-right">50%</span>
+                            <span>Settings</span>
+                          </a>
+                        </li>
+                        <li><a href="javascript:;">Help</a></li>                                                
+                      -->
+                      <li><a href="{% url 'logout'%}?next={{request.path}}">Log out</a></li>                         
+                      <li><a href="{% url 'password_change'%}?next={{request.path}}">Change Password</a></li>                         
+                      </ul>
+                      
+                  
+                </li>
+                {% endif %} 
+
+                <li role="presentation" class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <!--  <i class="fa fa-envelope-o"></i>  -->
+                    {% if  user.is_authenticated %}
+                    Yang, Make a Positive Impact everyday!
+                    {% else %}
+                    <a href = "http://127.0.0.1:8000/accounts/login/">abcdef</a> 
+                    {% endif %}
+                    
+                    <!-- <span class="badge bg-green">Yes</span> -->
+
+                  </a>
+                  
+                </li>
+
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            
+            
+            <div class="col-md-3 col-xs-12 widget widget_tally_box">
+                    <div class="x_panel fixed_height_590">
+                        <div class="x_content">
+                    
+                        <div class="flex">
+                            <ul class="list-inline widget_profile_box">
+                            <li>
+                                <a>
+                                <i class="fa fa-facebook"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <img src="{{ baseUrl }}{{img_url}}" class="img-circle profile_img"> 
+                            </li>
+                            <li>
+                                <a>
+                                <i class="fa fa-twitter"></i>
+                                </a>
+                            </li>
+                            </ul>
+                        </div>
+                    
+                        <h3 class="name">Musimbi</h3>
+                    
+                        <div class="flex">
+                            <ul class="list-inline count2">
+                            <li>
+                                <h3>123</h3>
+                                <span>Articles</span>
+                            </li>
+                            <li>
+                                <h3>1234</h3>
+                                <span>Followers</span>
+                            </li>
+                            <li>
+                                <h3>123</h3>
+                                <span>Following</span>
+                            </li>
+                            <li>
+                                    <h3>123</h3>
+                                    <span>Following</span>
+                            </li>
+                            </ul>
+                        </div>
+                        <div class="flex">
+                                <ul class="list-inline count2">
+                                <li>
+                                    <h3>123</h3>
+                                    <span>Articles</span>
+                                </li>
+                                <li>
+                                    <h3>1234</h3>
+                                    <span>Followers</span>
+                                </li>
+                                <li>
+                                    <h3>123</h3>
+                                    <span>Following</span>
+                                </li>
+                                <li>
+                                        <h3>123</h3>
+                                        <span>Following</span>
+                                </li>
+                                </ul>
+                        </div>
+                        <p>
+                            If you've decided to go in development mode and tweak all of this a bit, there are few things you should do.
+                        </p>
+                        </div>
+            </div>
+
+
+
+        </div>            
+
+                
+            <!--- Trust Pilot-->
+            <div class="row">
+                <div class="x_panel">
+                    <!-- TrustBox widget - Carousel -->
+                    <div class="trustpilot-widget" data-locale="en-US" data-template-id="53aa8912dec7e10d38f59f36" data-businessunit-id="571fa0520000ff00058c0de4" data-style-height="130px" data-style-width="100%" data-theme="light" data-stars="5">
+                        <a href="https://www.trustpilot.com/review/newdayusa.com" target="_blank">Trustpilot</a>
+                    </div>          
+                    <!-- End TrustBox widget -->            
+                </div>
+            </div>                
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <footer>
+            <div class="pull-right">
+                NewDay USA Sales Dashboard beta! <a href="https://www.NewdayUSA.com">Analytics</a>
+            </div>
+            <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+      
+        </div>
+  
+  
+    {% load static %} 
+    <!-- jQuery -->
+    <script src="{% static '/dashboard_1/jquery.min.js' %}"></script>
+    <!-- Bootstrap -->
+    <script src="{% static '/dashboard_1/bootstrap.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static '/dashboard_1/fastclick.js' %}"></script>
+    <!-- NProgress -->
+    <script src="{% static '/dashboard_1/nprogress.js' %}"></script>
+    <!-- Chart.js -->
+    <script src="{% static '/dashboard_1/Chart.min.js' %}"></script>
+    <!-- gauge.js -->
+    <script src="{% static '/dashboard_1/gauge.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static '/dashboard_1/bootstrap-progressbar.min.js' %}"></script>
+    <!-- iCheck -->
+    <script src="{% static '/dashboard_1/icheck.min.js' %}"></script>
+    <!-- Skycons -->
+    <script src="{% static '/dashboard_1/skycons.js' %}"></script>
+
+    <!-- Flot 
+    <script src="{% static '/dashboard_1/jquery.flot.js' %}"></script>
+    <script src="{% static '/dashboard_1/jquery.flot.pie.js' %}"></script>
+    <script src="{% static '/dashboard_1/jquery.flot.time.js' %}"></script>
+    <script src="{% static '/dashboard_1/jquery.flot.stack.js' %}"></script>
+    <script src="{% static '/dashboard_1/jquery.flot.resize.js' %}"></script>
+    
+    <script src="{% static '/dashboard_1/jquery.flot.orderBars.js' %}"></script>
+    <script src="{% static '/dashboard_1/jquery.flot.spline.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/curvedLines.js' %}"></script>
+
+    -->
+    <!-- DateJS -->
+    <script src="{% static '/dashboard_1/date.js' %}"></script>
+    <!-- JQVMap -->
+    <script src="{% static '/dashboard_1/jquery.vmap.js' %}"></script>
+    <script src="{% static '/dashboard_1/jquery.vmap.world.js' %}"></script>
+    <script src="{% static '/dashboard_1/jquery.vmap.sampledata.js' %}"></script>
+    <!-- bootstrap-daterangepicker-->
+    <script src="{% static '/dashboard_1/moment.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/daterangepicker.js' %}"></script>
+
+    <!-- data tables -->
+    <script src="{% static '/dashboard_1/jquery.dataTables.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/buttons.bootstrap.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/buttons.flash.js' %}"></script>
+    <script src="{% static '/dashboard_1/buttons.html5.js' %}"></script>
+    <script src="{% static '/dashboard_1/buttons.print.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.fixedHeader.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.keyTable.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/responsive.bootstrap.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.scroller.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/jszip.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/pdfmake.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/vfs_fonts.js' %}"></script>
+ 
+    <!-- Custom Theme Scripts -->
+    <script src="{% static 'dashboard_1/build/js/custom.js' %}"></script>
+	
+  </body>
+</html>
