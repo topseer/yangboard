@@ -2131,7 +2131,7 @@ if (typeof NProgress != 'undefined') {
 				
  
 				var ctx = document.getElementById("activityChart");
-				ctx.height = 92;
+				ctx.height = 60;
 			  var activityChart = new Chart(ctx, {
 				type: 'bar',
 				data: 

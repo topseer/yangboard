@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 import pyodbc 
 import pandas.io.sql as sql
 import pandas as pd
+from django.contrib.auth.models import Group
+
 
 #for i in range(100):
 
@@ -16,18 +18,24 @@ query = """
 select lower(email) email, 
 	   lower( left(email, charindex('@',email,1)-1)) as UserName,
 	   lower( left(email, charindex('@',email,1)-1)) as Password,
-	   WaterFallDivision
+	   WaterFallDivision	   
 from topDownAELookupTable
 where WaterFallDivision!=''
 and ActiveCd = 'Y'
+and Email!=''
 """
+
 
 queryResult = sql.read_sql(query, cnxn)
  
 
 for i in range(len(queryResult)):
-  name = queryResult["UserName"][i]
+  qname = queryResult["UserName"][i]
   pw = queryResult["Password"][i]
   email = queryResult["email"][i]
-  print (name, pw, email)
+  waterfalldivision = queryResult["WaterFallDivision"][i]
+  user_group = Group.objects.get(name=waterfalldivision)   
+  print (qname, pw, email)
   User.objects.create_user(qname,email, pw)
+  uid = User.objects.get(username=qname)
+  user_group.user_set.add(uid)

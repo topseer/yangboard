@@ -2,13 +2,15 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2><i class="green">  {{myTotalLoans}} </i> Loans, 
+            <h2><i class="green">  {{myTotalLoans}} {{user_email}} </i> Loans, 
                 <i class="red">  {{myPip}} </i> Pre-IP,  
                 <i class="blue"> {{myIP}} </i> In Processing &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{myNoteContent}}
+                <!--
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(38, 185, 154, 0.8)">Just-Called</span> 
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(52, 152, 219, 0.8)">Called-This-Week</span> 
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(243, 156, 18, 0.8)">Warning</span> 
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(231, 76, 60, 0.8)">Losing</span> 
+                -->
             </h2>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -33,7 +35,7 @@
                         <th>BorrPh</th>
                         <th>LastCallTime</th>
                         <th>DaysSinceLastContact</th>
-                        <th>X</th>   
+                        <th>Flag</th>   
                     </tr>
                 </thead>
             </table>

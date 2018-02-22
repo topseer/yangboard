@@ -66,30 +66,9 @@ def refresh_data(user_email):
       global_ytd_data = ytd_data_new. get_ytdData()
 
 
-def equivalentRate(request):
-    if request.user.is_authenticated():
-                
-        loanNumber = request.GET.get('loanNumber')            
-        
-        if loanNumber == None: loanNumber = "XXXXXXX"
-        
-        my_loaninfo,total_int_saved,erate1,erate2,lastPaymentYear,lastPaymentMonth = loan_info.get_LoanInfo(loanNumber)
-        
-        my_loaninfo_fstnm = my_loaninfo["FstNm"][0]
-        my_loaninfo_lstnm = my_loaninfo["LstNm"][0]
-        my_loaninfo_intrate = my_loaninfo["IntRate"][0]
-        my_loaninfo_fico = my_loaninfo["FICOScore"][0]
-        my_loaninfo_LoanAmt = my_loaninfo["LoanAmt"][0]
-                
-            
-        user = request.user
-        user_email = user.email.lower()
-        
-        isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()         
-        myteam = get_myTeam.get_myTeam(user_email)
-                
-         
-        #pic
+def HomePage(request):
+    if request.user.is_authenticated:
+                       
         img_url = 'img.jpg'
         
         salesQuote = ['You will never find time for anything. If you want time you must make it. – Charles Robert Buxton',
@@ -104,26 +83,9 @@ def equivalentRate(request):
                       'There are no shortcuts to any place worth going. – Beverly Sills',
                       'Life’s battles don’t always go to the strongest or fastest; sooner or later those who win are those who think they can. – Richard Bach'
         ]
-        return render(request, 'app_equivalentrate.html',
+        return render(request, 'HomePage.html',
                     context={                        
-                             'salesQuote':salesQuote,
-                             'user_email':user_email,        
-                             'isAVP':isAVP,
-                             'myteam':myteam,      
-                             
-                             
-                             'loanNumber':loanNumber,
-                             'my_loaninfo_fstnm':my_loaninfo_fstnm,
-                             'my_loaninfo_lstnm':my_loaninfo_lstnm ,
-                             'my_loaninfo_intrate':my_loaninfo_intrate,
-                             'my_loaninfo_fico':my_loaninfo_fico ,
-                             'my_loaninfo_LoanAmt':my_loaninfo_LoanAmt ,
-                             'total_int_saved':total_int_saved,
-                             'erate1':erate1,
-                             'erate2':erate2,
-                             'lastPaymentYear':lastPaymentYear,
-                             'lastPaymentMonth':lastPaymentMonth,        
-                                              
+                             'salesQuote':salesQuote,                     
                              'img_url':img_url,
                   
 
@@ -137,10 +99,11 @@ def equivalentRate(request):
     #      context={'num_leads_yst':num_Router_lstWk,'user_email':user_email,'form':form},
     #      ) 
 
+
   
     
 def dashboard(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         
         
         loanNumber = request.GET.get('loanNumber')            
@@ -170,10 +133,15 @@ def dashboard(request):
         ##get activities data 
         #activity_top20,activity_top50,activity_myself = getDivAverage.getDivAverage (user_email)
         global_getDivAverage_user = global_getDivAverage.loc[global_getDivAverage["Email"]==user_email]  
-                        
-        activity_top20 = list(global_getDivAverage_user.loc[global_getDivAverage_user["Category"]=="Top20",["Leads_AVG","Capture_AVG","Pitch_AVG","AO_AVG","Fund_AVG"]].as_matrix()[0])
-        activity_top50 = list(global_getDivAverage_user.loc[global_getDivAverage_user["Category"]=="Top50",["Leads_AVG","Capture_AVG","Pitch_AVG","AO_AVG","Fund_AVG"]].as_matrix()[0])
-        activity_myself = list(global_getDivAverage_user.loc[global_getDivAverage_user["Category"]=="Top20",["MyLeads","Capture","Pitch","AO","Fund"]].as_matrix()[0])
+
+        if len(global_getDivAverage_user)==0: 
+          activity_top20 = [0]
+          activity_top50 = [0]
+          activity_myself = [0]
+        else: 
+          activity_top20 = list(global_getDivAverage_user.loc[global_getDivAverage_user["Category"]=="Top20",["Leads_AVG","Capture_AVG","Pitch_AVG","AO_AVG","Fund_AVG"]].as_matrix()[0])
+          activity_top50 = list(global_getDivAverage_user.loc[global_getDivAverage_user["Category"]=="Top50",["Leads_AVG","Capture_AVG","Pitch_AVG","AO_AVG","Fund_AVG"]].as_matrix()[0])
+          activity_myself = list(global_getDivAverage_user.loc[global_getDivAverage_user["Category"]=="Top20",["MyLeads","Capture","Pitch","AO","Fund"]].as_matrix()[0])
             
         if len(activity_top20)==0:
           activity_top20 = [0]
@@ -247,10 +215,15 @@ def dashboard(request):
           WebClose13wk_Rel= 120
           Open_to_pich_13wk_Rel= 120
           Pitch_to_AO_13wk_Rel= 120
-
+          RouterCapture13wk = 0 
+          WebCapture13wk = 0 
+          WebClose13wk = 0 
+          Pitch_to_AO_13wk = 0
+          Open_to_pich_13wk = 0 
+          RouterClose13wk = 0 
 
         #the top section: check ytdData is not null!!!
-        test_123 = global_ytd_data.loc[global_ytd_data["Email"]==user_email,]
+        test_123 = ''
         
         ytdData = global_ytd_data.loc[global_ytd_data["Email"]==user_email,]
         #ytdData = ytd_data.get_ytdData (user_email)   
@@ -460,7 +433,7 @@ def dashboard(request):
 
 
 def myPipeline(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user = request.user
         user_email = user.email.lower()
         
@@ -525,22 +498,98 @@ def myPipeline(request):
                               'user_email':user_email,    
                               'img_url':img_url, 
                               'aePipeline_js':aePipeline,
-                              'aePipeline_json':aePipeline_json,                              
+                              'aePipeline_json':aePipeline_json,           
+                              'myteam':myteam,       
+                              'isAVP':isAVP
                             },
          ) 
     else:       
        return  redirect('accounts/login/')
-    # return render(
-    #     request, 
-    #      'GDashboard/production/index.html',
-    #      context={'num_leads_yst':num_Router_lstWk,'user_email':user_email,'form':form},
-    #      ) 
+  
+
+
+
+def my_team_member_pipeline(request,team_member_email):
+    if request.user.is_authenticated:
+        user = request.user
+        #user_email = user.email.lower()
+        user_email = team_member_email.lower()
+        
+        isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()         
+        myteam = get_myTeam.get_myTeam(user_email)
+
+        refresh_data(user_email)
+        myNoteContent = ""
+        note_appointment = ""
+
+        if request.method == 'POST':                                
+          myNoteForm = NoteForm(request.POST)          
+          
+          if myNoteForm.is_valid():            
+            myNoteContent = myNoteForm.cleaned_data['note_title']
+            myNoteForm = NoteForm()
+        
+        else:
+          myNoteForm = NoteForm()
+              
+
+        ae_pipeline_sum = AE_Pipeline_Count.get_AEPipeline_Count(user_email)
+
+        if len(ae_pipeline_sum)>0:
+          myPip = ae_pipeline_sum["Pip"][0]            
+          myIP = ae_pipeline_sum["IP"][0]            
+          myTotalLoans = ae_pipeline_sum["TotalPipe"][0]            
+        else:
+          myPip = 1
+          myIP = 1
+          myTotalLoans = 2
+
+        #pipe
+        aePipeline = AE_Pipeline.get_AEPipeline(user_email)         
+        aePipeline_json = json.dumps(aePipeline)
+        
+        #pic
+        img_url = 'img.jpg'
+
+
+        
+        salesQuote = ['You will never find time for anything. If you want time you must make it. – Charles Robert Buxton',
+                      'The difference between a successful person and others is not a lack of strength, not a lack of knowledge, but rather a lack of will. – Vince Lombardi',                      
+                      'The difference between try and triumph is just a little umph! – Marvin Phillips',
+                      'Every brand isn’t for everybody, and everybody isn’t for every brand. – Liz Lange',
+                      'The most unprofitable item ever manufactured is an excuse. – John Mason',
+                      'Success is the culmination of failures, mistakes, false starts, confusion, and the determination to keep going anyway. – Nick Gleason',
+                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job. – Roy Bartell',
+                      'You dont close a sale; you open a relationship if you want to build a long-term, successful enterprise. – Patricia Fripp',
+                      'If you are not taking care of your customer, your competitor will. – Bob Hooey',
+                      'There are no shortcuts to any place worth going. – Beverly Sills',
+                      'Life’s battles don’t always go to the strongest or fastest; sooner or later those who win are those who think they can. – Richard Bach'
+        ]
+        return render(request, 'myPipeline.html',
+                    context={
+                              'myNoteForm':myNoteForm,
+                              'myNoteContent':myNoteContent,
+                              'myPip':myPip    ,
+                              'myIP':myIP    ,
+                              'myTotalLoans':myTotalLoans  ,
+                              'salesQuote':salesQuote,
+                              'user_email':user_email,    
+                              'img_url':img_url, 
+                              'aePipeline_js':aePipeline,
+                              'aePipeline_json':aePipeline_json,           
+                              'myteam':myteam,       
+                              'isAVP':isAVP
+                            },
+         ) 
+    else:       
+       return  redirect('accounts/login/')
+  
 
 
 
 
 def my_team_member(request,team_member_email):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         
         user_email = team_member_email
         
@@ -802,4 +851,75 @@ def my_team_summary(request):
   return render(request, 'dashboard_team.html',context={'img_url':img_url,})
 
 
+
+def equivalentRate(request):
+    if request.user.is_authenticated:
+                
+        loanNumber = request.GET.get('loanNumber')            
+        
+        if loanNumber == None: loanNumber = "XXXXXXX"
+        
+        my_loaninfo,total_int_saved,erate1,erate2,lastPaymentYear,lastPaymentMonth = loan_info.get_LoanInfo(loanNumber)
+        
+        my_loaninfo_fstnm = my_loaninfo["FstNm"][0]
+        my_loaninfo_lstnm = my_loaninfo["LstNm"][0]
+        my_loaninfo_intrate = my_loaninfo["IntRate"][0]
+        my_loaninfo_fico = my_loaninfo["FICOScore"][0]
+        my_loaninfo_LoanAmt = my_loaninfo["LoanAmt"][0]
+                
+            
+        user = request.user
+        user_email = user.email.lower()
+        
+        isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()         
+        myteam = get_myTeam.get_myTeam(user_email)
+                
+         
+        #pic
+        img_url = 'img.jpg'
+        
+        salesQuote = ['You will never find time for anything. If you want time you must make it. – Charles Robert Buxton',
+                      'The difference between a successful person and others is not a lack of strength, not a lack of knowledge, but rather a lack of will. – Vince Lombardi',                      
+                      'The difference between try and triumph is just a little umph! – Marvin Phillips',
+                      'Every brand isn’t for everybody, and everybody isn’t for every brand. – Liz Lange',
+                      'The most unprofitable item ever manufactured is an excuse. – John Mason',
+                      'Success is the culmination of failures, mistakes, false starts, confusion, and the determination to keep going anyway. – Nick Gleason',
+                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job. – Roy Bartell',
+                      'You dont close a sale; you open a relationship if you want to build a long-term, successful enterprise. – Patricia Fripp',
+                      'If you are not taking care of your customer, your competitor will. – Bob Hooey',
+                      'There are no shortcuts to any place worth going. – Beverly Sills',
+                      'Life’s battles don’t always go to the strongest or fastest; sooner or later those who win are those who think they can. – Richard Bach'
+        ]
+        return render(request, 'app_equivalentrate.html',
+                    context={                        
+                             'salesQuote':salesQuote,
+                             'user_email':user_email,        
+                             'isAVP':isAVP,
+                             'myteam':myteam,      
+                             
+                             
+                             'loanNumber':loanNumber,
+                             'my_loaninfo_fstnm':my_loaninfo_fstnm,
+                             'my_loaninfo_lstnm':my_loaninfo_lstnm ,
+                             'my_loaninfo_intrate':my_loaninfo_intrate,
+                             'my_loaninfo_fico':my_loaninfo_fico ,
+                             'my_loaninfo_LoanAmt':my_loaninfo_LoanAmt ,
+                             'total_int_saved':total_int_saved,
+                             'erate1':erate1,
+                             'erate2':erate2,
+                             'lastPaymentYear':lastPaymentYear,
+                             'lastPaymentMonth':lastPaymentMonth,        
+                                              
+                             'img_url':img_url,
+                  
+
+                            },
+         ) 
+    else:       
+       return  redirect('accounts/login/')
+    # return render(
+    #     request, 
+    #      'GDashboard/production/index.html',
+    #      context={'num_leads_yst':num_Router_lstWk,'user_email':user_email,'form':form},
+    #      ) 
       

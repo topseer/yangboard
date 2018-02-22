@@ -149,111 +149,114 @@
                 // `d` is the original data object for the row
                 return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
                     '<tr>'+
-                        '<td>Note 1:</td>'+
-                        '<td>'+   aePipeData1.find(o => o[0] === '1213726')[0]     +'</td>'+
-                    '</tr>'+
-                    '<tr>'+
-                        '<td>Appointment: </td>'+
-                        '<td>'+aePipeData1.find(o => o[0] === '1213726')[2]+  '</td>'+
-                    '</tr>'+
-                    '<tr>'+
-                        '<td>Extra info:</td>'+
-                        '<td>And any further details here..........</td>'+
-                    '</tr>'+
-                '</table>'+
-                '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-                    '<tr>'+
-                        '<td>Note 2:</td>'+
-                        '<td>'+ aePipeData1.find(o => o[0] === '1213726')[0]  +'</td>'+
-                    '</tr>'+
-                    '<tr>'+
-                        '<td>Appointment:</td>'+
-                        '<td>'+aePipeData1.find(o => o[0] === '1213726')[2] +'</td>'+
-                    '</tr>'+
-                    '<tr>'+
-                        '<td>Extra info:</td>'+
-                        '<td>And any further details here test</td>'+
-                    '</tr>'+
-                '</table>' +
+                        '<td>CRM:</td>'+
+                        '<td>'+ d[9]    +'</td>'+
+                    '</tr>'+                    
+                '</table>'
+        };
+
+        var table = $('#datatable-fixed-header').DataTable({                
+            fixedHeader: true,
+            data: aePipeData1,
+            responsive: true,                                
+            columns: [                                          
+                { title: "LoanNum"},                       
+                { title: "WallStreet" },
+                { title: "BorrName" },
+                { title: "LstSts" },
+                { title: "Sts Date" },
+                { title: "Days In Status" },
+                { title: "BorrPh" },
+                { title: "LastCallTime" },
+                { title: "DaysSinceLastContact" },
+                {
+                "className":      'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
+                },                
+            ],
+            "createdRow": function ( row, data, index ) 
+                {
+                    // different color by Last Contact Date
+                        if ( data[8] <= 2 ) {                
+                            $( row ).find('td:eq(7)').addClass( "success" );
+                        } else if (data[8] <= 7)           {
+                            $( row ).find('td:eq(7)').addClass( "info" );
+                        } else if (data[8] <= 14)            {
+                            $( row ).find('td:eq(7)').addClass( "warning" );
+                        } else              {
+                            $( row ).find('td:eq(7)').addClass( "danger" );
+                        }
+                    
+                    // different color by WallStreet
+                        if ( data[1] == "AAA" ) {                
+                            $( row ).find('td:eq(1)').addClass( "success" );
+                        } else if ( data[1] == "AA" ) {                
+                            $( row ).find('td:eq(1)').addClass( "info" );
+                        } else if ( data[1] == "A" ) {                
+                            $( row ).find('td:eq(1)').addClass( "warning" );
+                        }     
+
+                    // different color by WallStreet
+                        if ( data[9] == "Good" ) {                
+                            $( row ).find('td:eq(9)').addClass( "success" );
+                        } else if ( data[9] != "Good" ) {                                            
+                            $( row ).find('td:eq(9)').addClass( "danger" );
+                        }                                                          
+        
+                },
+            pageLength: 50,
+            order: [[ 2, "asc" ],[ 3, "asc" ]],                                         
+        });              
+        // Add event listener for opening and closing details
+        $('#datatable-fixed-header tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+    
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data()) ).show();
+                tr.addClass('shown');
+            }
+        });
+                            
+    </script>    
+
+  </body>
+</html>
+
+
+
+
+
+
+
+
+<!--
+'<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+    '<tr>'+
+        '<td>Note 2:</td>'+
+        '<td>'+ aePipeData1.find(o => o[0] === '1219985')[0]  +'</td>'+
+    '</tr>'+
+    '<tr>'+
+        '<td>Appointment:</td>'+
+        '<td>'+aePipeData1.find(o => o[0] === '1219985')[2] +'</td>'+
+    '</tr>'+
+    '<tr>'+
+        '<td>Extra info:</td>'+
+        '<td>And any further details here test</td>'+
+    '</tr>'+
+'</table>' +
++ 
                 '<form  method="post" class="pull-mid" action ="." > ' +
                     '<input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken">'+
                     '{{ myNoteForm|linebreaks }} '+                    
                     '<input type="submit" value="Submit Note" />'+
                 '</form>'
-        };
-        
-        
-     
-
-            var table = $('#datatable-fixed-header').DataTable({                
-                fixedHeader: true,
-                data: aePipeData1,
-                responsive: true,                                
-                columns: [  
-                                          
-                    { title: "LoanNum"},                       
-                    { title: "WallStreet" },
-                    { title: "BorrName" },
-                    { title: "LstSts" },
-                    { title: "Sts Date" },
-                    { title: "Days In Status" },
-                    { title: "BorrPh" },
-                    { title: "LastCallTime" },
-                    { title: "DaysSinceLastContact" },
-                    {
-                    "className":      'details-control',
-                    "orderable":      false,
-                    "data":           null,
-                    "defaultContent": ''
-                    },
-                    
-                ],
-                "createdRow": function ( row, data, index ) 
-                    {
-                         if ( data[8] <= 2 ) {                
-                             $( row ).find('td:eq(7)').addClass( "success" );
-                         } else if (data[8] <= 7)           {
-                             $( row ).find('td:eq(7)').addClass( "info" );
-                         } else if (data[8] <= 14)            {
-                             $( row ).find('td:eq(7)').addClass( "warning" );
-                         } else              {
-                             $( row ).find('td:eq(7)').addClass( "danger" );
-                         }
-                                 // remove "find.()" to addClass to the whole Row
-                         if ( data[1] == "AAA" ) {                
-                             $( row ).find('td:eq(1)').addClass( "success" );
-                         } else if ( data[1] == "AA" ) {                
-                             $( row ).find('td:eq(1)').addClass( "info" );
-                         } else if ( data[1] == "A" ) {                
-                             $( row ).find('td:eq(1)').addClass( "warning" );
-                         }                
-         
-                    },
-                pageLength: 50,
-                order: [[ 2, "asc" ],[ 3, "asc" ]],                                         
-            });              
-
-                    // Add event listener for opening and closing details
-                    $('#datatable-fixed-header tbody').on('click', 'td.details-control', function () {
-                        var tr = $(this).closest('tr');
-                        var row = table.row( tr );
-                
-                        if ( row.child.isShown() ) {
-                            // This row is already open - close it
-                            row.child.hide();
-                            tr.removeClass('shown');
-                        }
-                        else {
-                            // Open this row
-                            row.child( format(row.data()) ).show();
-                            tr.addClass('shown');
-                        }
-                    } );
-                              
-    </script>    
-
-
-
-
-  </body>
-</html>
+-->

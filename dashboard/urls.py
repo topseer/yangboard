@@ -18,20 +18,23 @@ from django.contrib import admin
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url('accounts/login/', auth_views.LoginView.as_view()),
+    url('accounts/logout/', auth_views.LoginView.as_view()),
+    url('admin/login/', auth_views.LoginView.as_view()),
+    url(r'^admin/', admin.site.urls),    
 ]
 
 urlpatterns += [
-    url(r'^dashboard/', include('yangboard.urls')),    
-    url(r'^app_equivalentrate/', include('yangboard.urls')),    
-    url(r'^app_equivalentrate', include('yangboard.urls')),    
+    url(r'^$', include('yangboard.urls')),    
+    url(r'/dashboard/', include('yangboard.urls')),    
+    url(r'/homepage/', include('yangboard.urls')),        
+    #url(r'/app_equivalentrate/', include('yangboard.urls')),        
     url(r'/myPipeline/', include('yangboard.urls')),    
 ]	
-
-
 
 urlpatterns += [
     url(r'^', include('yangboard.urls')),
@@ -41,9 +44,9 @@ urlpatterns += [
     url(r'^yangboard/', include('yangboard.urls')),
 ]	
 
-urlpatterns += [
+urlpatterns += [    
     url(r'^accounts/', include('django.contrib.auth.urls')),	
-	 url(r'^dashboard/accounts/', include('django.contrib.auth.urls')),	    
+	url(r'^/dashboard/accounts/', include('django.contrib.auth.urls')),	    
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
