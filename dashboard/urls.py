@@ -30,19 +30,14 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^$', include('yangboard.urls')),    
-    url(r'/dashboard/', include('yangboard.urls')),    
-    url(r'/homepage/', include('yangboard.urls')),        
-    #url(r'/app_equivalentrate/', include('yangboard.urls')),        
-    url(r'/myPipeline/', include('yangboard.urls')),    
+    #url(r'/dashboard/', include('yangboard.urls')),    
+    #url(r'/homepage/', include('yangboard.urls')),        
+    #url(r'/app_equivalentrate/', include('yangboard.urls')),            
 ]	
 
 urlpatterns += [
     url(r'^', include('yangboard.urls')),
 ]
-
-urlpatterns += [
-    url(r'^yangboard/', include('yangboard.urls')),
-]	
 
 urlpatterns += [    
     url(r'^accounts/', include('django.contrib.auth.urls')),	

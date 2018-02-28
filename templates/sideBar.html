@@ -25,11 +25,15 @@
                                 <a><i class="fa fa-area-chart"></i>My Reports<span class="fa fa-chevron-down"></span>
                                 </a>
                                 <ul class="nav child_menu">
+                                  {% if not isPrch %}
                                   <li><a href="/dashboard/">Dashboard</a></li>
+                                  {% endif %}
                                   <li><a href="/myPipeline/">myPipeline</a></li>
-                                  <li><a href="/myPipeline/">{{isAVP}}</a></li>
-                                  
+                                  <li><a href="/myPipeline/">Is Prch? {{ isPrch }}</a></li>
+                                  <li><a href="/myPipeline/">Is AVP? {{ isAVP }}</a></li>
+                        
                                   <!--
+                                  
                                   <li><a href="/app_equivalentrate/">Equivalent Rate</a></li>
                                  
                                   <li><a href="/dashboard3"> {{test_test}}</a></li>                       
@@ -43,6 +47,7 @@
                               <a><i class="fa fa-area-chart"></i>My Team's Pipeline<span class="fa fa-chevron-down"></span>
                               </a>
                               <ul class="nav child_menu">
+                                <li><a href="/myTeamPipeline/">___Team Pipeline___</a></li>
                                 {% for name in myteam %}
                                 <li><a href="/myPipeline/myteam/{{name.1}}">{{name.0}}</a></li>                          
                                 {% endfor %}
@@ -50,7 +55,7 @@
                             </li>                                 
                             {% endif %}
 
-                            {% if isAVP %}
+                            {% if isAVP and not isPrch %}
                             <li>
                               <a><i class="fa fa-area-chart"></i>My Team's Dashboard<span class="fa fa-chevron-down"></span>
                               </a>

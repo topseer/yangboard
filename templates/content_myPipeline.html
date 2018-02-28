@@ -2,15 +2,19 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2><i class="green">  {{myTotalLoans}} {{user_email}} </i> Loans, 
+            <h2><i class="green">  {{myTotalLoans}} </i> Loans, 
                 <i class="red">  {{myPip}} </i> Pre-IP,  
-                <i class="blue"> {{myIP}} </i> In Processing &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{myNoteContent}}
+                <i class="blue"> {{myIP}} </i> In Processing &nbsp &nbsp &nbsp &nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{user_email}} {{myNoteContent}}
                 <!--
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(38, 185, 154, 0.8)">Just-Called</span> 
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(52, 152, 219, 0.8)">Called-This-Week</span> 
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(243, 156, 18, 0.8)">Warning</span> 
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(231, 76, 60, 0.8)">Losing</span> 
-                -->
+                                
+                -->                
+                
+                <input type="button" id="btn-filter" value="Flagged Loans Only"/>
+                <input type="button" id="btn-undo" value="All Loans"/>
             </h2>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -22,7 +26,7 @@
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
-            
+                        
             <table id="datatable-fixed-header" class="table table-striped table-bordered" cellspacing="0" width = "100%"   >
                 <thead>
                     <tr>                                             
@@ -39,6 +43,7 @@
                     </tr>
                 </thead>
             </table>
+            
 
           </div>
     

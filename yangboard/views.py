@@ -69,6 +69,11 @@ def refresh_data(user_email):
 def HomePage(request):
     if request.user.is_authenticated:
                        
+        isAVP= request.user.groups.filter(name__in=['avp','AVP']).exists()                                
+        isPrch  = request.user.groups.filter(name__in=['Purchase']).exists()   
+        user = request.user
+        user_email = user.email.lower()
+        myteam = get_myTeam.get_myTeam(user_email)                             
         img_url = 'img.jpg'
         
         salesQuote = ['You will never find time for anything. If you want time you must make it. – Charles Robert Buxton',
@@ -87,8 +92,9 @@ def HomePage(request):
                     context={                        
                              'salesQuote':salesQuote,                     
                              'img_url':img_url,
-                  
-
+                             'isAVP':isAVP,
+                             'isPrch':isPrch,       
+                             'myteam':myteam,                 
                             },
          ) 
     else:       
@@ -123,6 +129,8 @@ def dashboard(request):
         user_email = user.email.lower()
         
         isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()         
+        isPrch = request.user.groups.filter(name__in=['Purchase']).exists()                                 
+
         myteam = get_myTeam.get_myTeam(user_email)
 
 
@@ -346,6 +354,7 @@ def dashboard(request):
                              'salesQuote':salesQuote,
                              'user_email':user_email,        
                              'isAVP':isAVP,
+                             'isPrch':isPrch,
                              'myteam':myteam,      
                              
                              
@@ -435,9 +444,12 @@ def dashboard(request):
 def myPipeline(request):
     if request.user.is_authenticated:
         user = request.user
-        user_email = user.email.lower()
-        
+
         isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()         
+        isPrch = request.user.groups.filter(name__in=['Purchase']).exists()               
+
+        user_email = user.email.lower()        
+
         myteam = get_myTeam.get_myTeam(user_email)
 
         refresh_data(user_email)
@@ -454,7 +466,6 @@ def myPipeline(request):
         else:
           myNoteForm = NoteForm()
               
-
         ae_pipeline_sum = AE_Pipeline_Count.get_AEPipeline_Count(user_email)
 
         if len(ae_pipeline_sum)>0:
@@ -462,9 +473,9 @@ def myPipeline(request):
           myIP = ae_pipeline_sum["IP"][0]            
           myTotalLoans = ae_pipeline_sum["TotalPipe"][0]            
         else:
-          myPip = 1
-          myIP = 1
-          myTotalLoans = 2
+          myPip = 0
+          myIP = 0
+          myTotalLoans = 0
 
         #pipe
         aePipeline = AE_Pipeline.get_AEPipeline(user_email)         
@@ -472,8 +483,6 @@ def myPipeline(request):
         
         #pic
         img_url = 'img.jpg'
-
-
         
         salesQuote = ['You will never find time for anything. If you want time you must make it. – Charles Robert Buxton',
                       'The difference between a successful person and others is not a lack of strength, not a lack of knowledge, but rather a lack of will. – Vince Lombardi',                      
@@ -500,7 +509,8 @@ def myPipeline(request):
                               'aePipeline_js':aePipeline,
                               'aePipeline_json':aePipeline_json,           
                               'myteam':myteam,       
-                              'isAVP':isAVP
+                              'isAVP':isAVP,
+                              'isPrch':isPrch
                             },
          ) 
     else:       
@@ -512,12 +522,13 @@ def myPipeline(request):
 def my_team_member_pipeline(request,team_member_email):
     if request.user.is_authenticated:
         user = request.user
-        #user_email = user.email.lower()
-        user_email = team_member_email.lower()
-        
+        user_email = user.email.lower()
         isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()         
-        myteam = get_myTeam.get_myTeam(user_email)
+        isPrch = request.user.groups.filter(name__in=['Purchase']).exists()               
+        myteam = get_myTeam.get_myTeam(user_email)    
 
+        user_email = team_member_email.lower()
+                    
         refresh_data(user_email)
         myNoteContent = ""
         note_appointment = ""
@@ -540,9 +551,9 @@ def my_team_member_pipeline(request,team_member_email):
           myIP = ae_pipeline_sum["IP"][0]            
           myTotalLoans = ae_pipeline_sum["TotalPipe"][0]            
         else:
-          myPip = 1
-          myIP = 1
-          myTotalLoans = 2
+          myPip = 0
+          myIP = 0
+          myTotalLoans = 0
 
         #pipe
         aePipeline = AE_Pipeline.get_AEPipeline(user_email)         
@@ -578,12 +589,81 @@ def my_team_member_pipeline(request,team_member_email):
                               'aePipeline_js':aePipeline,
                               'aePipeline_json':aePipeline_json,           
                               'myteam':myteam,       
-                              'isAVP':isAVP
+                              'isAVP':isAVP,
+                              'isPrch':isPrch
                             },
          ) 
     else:       
        return  redirect('accounts/login/')
-  
+
+
+
+
+def my_team_total_pipeline(request):
+    if request.user.is_authenticated:
+        user = request.user
+        user_email = user.email.lower()
+        isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()         
+        isPrch = request.user.groups.filter(name__in=['Purchase']).exists()               
+        myteam = get_myTeam.get_myTeam(user_email)    
+        
+                    
+        refresh_data(user_email)
+        myNoteContent = ""
+        note_appointment = ""
+            
+        ae_pipeline_sum = AE_Pipeline_Count.get_TeamPipeline_Count(user_email)
+
+        if len(ae_pipeline_sum)>0:
+          myPip = ae_pipeline_sum["Pip"][0]            
+          myIP = ae_pipeline_sum["IP"][0]            
+          myTotalLoans = ae_pipeline_sum["TotalPipe"][0]            
+        else:
+          myPip = 0
+          myIP = 0
+          myTotalLoans = 0
+
+        #pipe
+        aePipeline = AE_Pipeline.get_TeamPipeline(user_email)         
+        aePipeline_json = json.dumps(aePipeline)
+        
+        #pic
+        img_url = 'img.jpg'
+
+
+        
+        salesQuote = ['You will never find time for anything. If you want time you must make it. – Charles Robert Buxton',
+                      'The difference between a successful person and others is not a lack of strength, not a lack of knowledge, but rather a lack of will. – Vince Lombardi',                      
+                      'The difference between try and triumph is just a little umph! – Marvin Phillips',
+                      'Every brand isn’t for everybody, and everybody isn’t for every brand. – Liz Lange',
+                      'The most unprofitable item ever manufactured is an excuse. – John Mason',
+                      'Success is the culmination of failures, mistakes, false starts, confusion, and the determination to keep going anyway. – Nick Gleason',
+                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job. – Roy Bartell',
+                      'You dont close a sale; you open a relationship if you want to build a long-term, successful enterprise. – Patricia Fripp',
+                      'If you are not taking care of your customer, your competitor will. – Bob Hooey',
+                      'There are no shortcuts to any place worth going. – Beverly Sills',
+                      'Life’s battles don’t always go to the strongest or fastest; sooner or later those who win are those who think they can. – Richard Bach'
+        ]
+        return render(request, 'my_Team_Pipeline.html',
+                    context={                              
+                              'myNoteContent':myNoteContent,
+                              'myPip':myPip    ,
+                              'myIP':myIP    ,
+                              'myTotalLoans':myTotalLoans  ,
+                              'salesQuote':salesQuote,
+                              'user_email':user_email,    
+                              'img_url':img_url, 
+                              'aePipeline_js':aePipeline,
+                              'aePipeline_json':aePipeline_json,           
+                              'myteam':myteam,       
+                              'isAVP':isAVP,
+                              'isPrch':isPrch
+                            },
+         ) 
+    else:       
+       return  redirect('accounts/login/')
+
+
 
 
 
