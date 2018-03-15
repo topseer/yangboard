@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Newday USA Sales myPipeLine</title>
+  
+
+    {% load static %} 
+    
+     <!--  <img src="{% static '/dashboard_1/images/img.jpg' %}" alt=""> --> 
+    <link rel="shortcut icon" type="image/x-icon" href="{% static '/dashboard_1/images/logo_small.png' %}" />
+
+    <!-- Bootstrap -->
+    <link href="{% static '/dashboard_1/bootstrap.min.css' %}"  rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{% static '/dashboard_1/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{% static '/dashboard_1/nprogress.css' %}" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="{% static '/dashboard_1/green.css' %}" rel="stylesheet">	
+    <!-- bootstrap-progressbar -->
+    <link href="{% static '/dashboard_1/bootstrap-progressbar-3.3.4.min.css' %}"  rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="{% static '/dashboard_1/jqvmap.min.css' %}"  rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static '/dashboard_1/daterangepicker.css' %}"  rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="{% static '/dashboard_1/build/css/custom.css' %}"  rel="stylesheet">
+
+    <!--Trust Pilot -->
+    <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+        
+    <!-- Include Required Prerequisites -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<!-- 
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" /> 
+-->
+     
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css" />
+  
+    <!-- Datatables -->
+    <link href="{% static '/dashboard_1/dataTables.bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static '/dashboard_1/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/dashboard_1/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/dashboard_1/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/dashboard_1/scroller.bootstrap.min.css' %}"  rel="stylesheet">
+ 
+ </head>
+
+  <body class="nav-md">
+
+
+    <div class="container body">
+      <div class="main_container">
+          <!-- sidebar menu -->
+          {% include "sideBar.html" %} 
+          <!-- /sidebar menu -->
+    
+  
+          
+          <!-- top navigation -->
+          {% include "topNav.html" %} 
+          <!-- /top navigation -->
+
+
+          <!-- content_myPipeline -->
+          {% include "content_myPipeline_prch.html" %} 
+          <!-- /content_myPipeline -->
+
+    
+ 
+          <!-- footer  -->
+          {% include "footer_bottom.html" %} 
+          <!-- /footer  -->
+      
+      
+        </div>
+    </div>
+  
+  
+    {% load static %} 
+    <!-- jQuery -->
+    <script src="{% static '/dashboard_1/jquery.min.js' %}"></script>
+    <!-- Bootstrap -->
+    <script src="{% static '/dashboard_1/bootstrap.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static '/dashboard_1/fastclick.js' %}"></script>
+    <!-- NProgress -->
+    <script src="{% static '/dashboard_1/nprogress.js' %}"></script>
+    <!-- Chart.js -->
+    <script src="{% static '/dashboard_1/Chart.min.js' %}"></script>
+    <!-- gauge.js -->
+    <script src="{% static '/dashboard_1/gauge.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static '/dashboard_1/bootstrap-progressbar.min.js' %}"></script>
+    <!-- iCheck -->
+    <script src="{% static '/dashboard_1/icheck.min.js' %}"></script>
+    <!-- Skycons -->
+    <script src="{% static '/dashboard_1/skycons.js' %}"></script>
+
+ 
+    <!-- DateJS -->
+    <script src="{% static '/dashboard_1/date.js' %}"></script>
+    <!-- JQVMap -->
+    <script src="{% static '/dashboard_1/jquery.vmap.js' %}"></script>
+    <script src="{% static '/dashboard_1/jquery.vmap.world.js' %}"></script>
+    <script src="{% static '/dashboard_1/jquery.vmap.sampledata.js' %}"></script>
+    <!-- bootstrap-daterangepicker-->
+    <script src="{% static '/dashboard_1/moment.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/daterangepicker.js' %}"></script>
+
+    <!-- data tables -->
+    <script src="{% static '/dashboard_1/jquery.dataTables.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/buttons.bootstrap.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/buttons.flash.js' %}"></script>
+    <script src="{% static '/dashboard_1/buttons.html5.js' %}"></script>
+    <script src="{% static '/dashboard_1/buttons.print.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.fixedHeader.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.keyTable.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/responsive.bootstrap.js' %}"></script>
+    <script src="{% static '/dashboard_1/dataTables.scroller.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/jszip.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/pdfmake.min.js' %}"></script>
+    <script src="{% static '/dashboard_1/vfs_fonts.js' %}"></script>
+
+
+    <!-- Custom Theme Scripts -->
+    <script src="{% static 'dashboard_1/build/js/custom.js' %}"></script>
+
+    <script> 
+        var aePipeData1 = {{ aePipeline_js|safe }}
+        var aePipeData2 = {{ aePipeline_PreQual_js|safe }}
+
+        function format ( d ) {
+                // `d` is the original data object for the row
+                return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+                    '<tr>'+
+                        '<td>CRM:</td>'+
+                        '<td>'+ d[11]    +'</td>'+
+                    '</tr>'+                    
+                '</table>'
+        };
+
+     
+
+        $('#btn-filter').on('click',function(){
+        $.fn.dataTable.ext.search.push(
+            
+            function(settings, data, dataIndex) 
+            {
+                return $(table.row(dataIndex).node()).hasClass('condition1');                        
+            }
+
+        );
+     
+            table.draw();            
+//            table_prequal.draw();
+        });
+
+
+
+        $('#btn-undo').on('click',function()
+        {
+            $.fn.dataTable.ext.search.pop();                        
+            table.draw();
+            table_prequal.draw();
+        }); 
+
+       
+
+        var table = $('#datatable-fixed-header').DataTable({                
+            fixedHeader: true,
+            data: aePipeData1,
+            responsive: false,                                
+            columns: [                                          
+                { title: "LoanNum"},                                       
+                { title: "HmSt" },
+                { title: "Borr_Name" },
+                { title: "CoBorr_Name" },
+                { title: "LstSts" },
+                { title: "Satus_Date" },                
+                { title: "BorrPh" },
+                { title: "Last_Call" },                
+                { title: "Nxt_Exp_Dt" },
+                { title: "Net_Exp_Nm" },
+                { title: "Contract_Exp_Dt" },
+                {
+                "className":      'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
+                },                
+            ],
+            "createdRow": function ( row, data, index ) 
+                {
+                    // different color by Last Contact Date
+                    //     if ( data[8] <= 2 ) {                
+                    //         $( row ).find('td:eq(7)').addClass( "success" );
+                    //     } else if (data[8] <= 7)           {
+                    //         $( row ).find('td:eq(7)').addClass( "info" );
+                    //     } else if (data[8] <= 14)            {
+                    //         $( row ).find('td:eq(7)').addClass( "warning" );
+                    //     } else              {
+                    //         $( row ).find('td:eq(7)').addClass( "danger" );
+                    //     }
+                    
+                    // // different color by WallStreet
+                    //     if ( data[1] == "AAA" ) {                
+                    //         $( row ).find('td:eq(1)').addClass( "success" );
+                    //     } else if ( data[1] == "AA" ) {                
+                    //         $( row ).find('td:eq(1)').addClass( "info" );
+                    //     } else if ( data[1] == "A" ) {                
+                    //         $( row ).find('td:eq(1)').addClass( "warning" );
+                    //     }     
+
+                     // different color by WallStreet
+                         if ( data[11] == "Good" ) {                
+                             $( row ).find('td:eq(11)').addClass( "success" );
+                         } else if ( data[9] != "Good" ) {                                            
+                             $( row ).find('td:eq(11)').addClass( "danger" );
+                         }
+
+                        if ( data[11] != "Good"){
+                             $(row).addClass('condition1');
+                         }                                                                                  
+        
+                },
+            pageLength: 50,
+            order: [[ 2, "asc" ],[ 3, "asc" ]],                                         
+        });         
+
+
+
+        //pre-qual
+        var table_prequal = $('#datatable-prequals').DataTable({                
+            fixedHeader: true,
+            data: aePipeData2,
+            responsive: false,                                
+            columns: [                                          
+                { title: "LoanNum"},                                       
+                { title: "HmSt" },
+                { title: "Borr_Name" },
+                { title: "CoBorr_Name" },
+                { title: "LstSts" },
+                { title: "Satus_Date" },                
+                { title: "BorrPh" },
+                { title: "Last_Call" },                
+                { title: "Nxt_Exp_Dt" },
+                { title: "Net_Exp_Nm" },
+                { title: "Contract_Exp_Dt" },
+                {
+                "className":      'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
+                },                
+                ],
+            "createdRow": function ( row, data, index ) 
+                {
+                         
+                         if ( data[11] == "Good" ) {                
+                             $( row ).find('td:eq(11)').addClass( "success" );
+                         } else if ( data[9] != "Good" ) {                                            
+                             $( row ).find('td:eq(11)').addClass( "danger" );
+                         } 
+
+                       // if ( data[11] != "Good"){
+                       //     $(row).addClass('condition1');
+                       // }                                                                                                                              
+        
+                },
+            pageLength: 50,
+            order: [[ 2, "asc" ],[ 3, "asc" ]],                                         
+        }); 
+
+
+        // Add event listener for opening and closing details
+        $('#datatable-fixed-header tbody').on('click', 'td.details-control', function () 
+        {
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+    
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data()) ).show();
+                tr.addClass('shown');
+            }
+        });
+        
+        $('#datatable-prequals tbody').on('click', 'td.details-control', function () 
+        {
+            var tr = $(this).closest('tr');
+            var row = table_prequal.row( tr );
+    
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data()) ).show();
+                tr.addClass('shown');
+            }
+        });
+        
+      
+    </script>    
+ 
+  </body>
+</html>
+
+
+
+
+
+
+
+
+<!--
+'<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+    '<tr>'+
+        '<td>Note 2:</td>'+
+        '<td>'+ aePipeData1.find(o => o[0] === '1219985')[0]  +'</td>'+
+    '</tr>'+
+    '<tr>'+
+        '<td>Appointment:</td>'+
+        '<td>'+aePipeData1.find(o => o[0] === '1219985')[2] +'</td>'+
+    '</tr>'+
+    '<tr>'+
+        '<td>Extra info:</td>'+
+        '<td>And any further details here test</td>'+
+    '</tr>'+
+'</table>' +
++ 
+                '<form  method="post" class="pull-mid" action ="." > ' +
+                    '<input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken">'+
+                    '{{ myNoteForm|linebreaks }} '+                    
+                    '<input type="submit" value="Submit Note" />'+
+                '</form>'
+-->

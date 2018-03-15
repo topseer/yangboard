@@ -1,7 +1,7 @@
 import pyodbc 
 import pandas.io.sql as sql
 
-def get_AEPipeline_Count(user_email):
+def get_AEPipeline_Count(user_email,isPrch):
   #user_email = 'btaylor@newdayusa.com'
   server = '10.203.1.105\\alpha' 
   database = 'test_yang' 
@@ -29,6 +29,28 @@ def get_AEPipeline_Count(user_email):
         where b.AE_Email = 'aaa@aaa.com'
         group by a.Email,a.Pip,a.IP
   """
+
+  if (isPrch): 
+	  query = """  
+        with Abcd as (  
+        select a.AE_PersonID as PersonID, b.Email,
+            sum(case when ApplicationDtm is not null then 1 else 0 end) as Pip,
+            sum(case when PreInProcessDtm is not null and ApprOrdDate is not null and InProcessDate is null then LoanAmt else 0 end) as Pip_LoanAMT,            
+			      count(*) - sum(case when ApplicationDtm is not null then 1 else 0 end) as IP,
+            sum(case when InProcessDate is not null then LoanAmt else 0 end) as IP_LoanAmt	   ,   
+			      count(*) as TotalLoans
+        from DashboardReport_LoanStatus_1 as a 
+        inner join topDownAELookupTable as b 
+        on a.AE_PersonID = b.PersonId
+        group by a.AE_PersonID,b.Email
+        )
+        select a.Email,a.Pip,a.IP,count(*) as TotalPipe 
+        from Abcd as a 
+        inner join DashboardReport_LoanStatus_1 as b 
+        on a.PersonID = b.AE_PersonID
+        where b.AE_Email = 'aaa@aaa.com'
+        group by a.Email,a.Pip,a.IP
+	"""	
   query = query.replace('aaa@aaa.com',user_email)  
 
   queryResult = sql.read_sql(query, cnxn)

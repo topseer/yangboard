@@ -1435,6 +1435,9 @@ tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
 
+ 
+
+
 .example_alt_pagination div.dataTables_info {
     width: 40%
 }

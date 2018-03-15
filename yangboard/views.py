@@ -466,7 +466,7 @@ def myPipeline(request):
         else:
           myNoteForm = NoteForm()
               
-        ae_pipeline_sum = AE_Pipeline_Count.get_AEPipeline_Count(user_email)
+        ae_pipeline_sum = AE_Pipeline_Count.get_AEPipeline_Count(user_email,isPrch)
 
         if len(ae_pipeline_sum)>0:
           myPip = ae_pipeline_sum["Pip"][0]            
@@ -478,9 +478,9 @@ def myPipeline(request):
           myTotalLoans = 0
 
         #pipe
-        aePipeline = AE_Pipeline.get_AEPipeline(user_email)         
-        aePipeline_json = json.dumps(aePipeline)
-        
+        aePipeline, aePipeline_PreQual= AE_Pipeline.get_AEPipeline(user_email,isPrch)     
+                        
+
         #pic
         img_url = 'img.jpg'
         
@@ -496,7 +496,9 @@ def myPipeline(request):
                       'There are no shortcuts to any place worth going. – Beverly Sills',
                       'Life’s battles don’t always go to the strongest or fastest; sooner or later those who win are those who think they can. – Richard Bach'
         ]
-        return render(request, 'myPipeline.html',
+
+        if (isPrch): 
+              return render(request, 'myPipeline_prch.html',
                     context={
                               'myNoteForm':myNoteForm,
                               'myNoteContent':myNoteContent,
@@ -506,13 +508,30 @@ def myPipeline(request):
                               'salesQuote':salesQuote,
                               'user_email':user_email,    
                               'img_url':img_url, 
-                              'aePipeline_js':aePipeline,
-                              'aePipeline_json':aePipeline_json,           
+                              'aePipeline_js':aePipeline,                                     
+                              'aePipeline_PreQual_js':aePipeline_PreQual,                                 
                               'myteam':myteam,       
                               'isAVP':isAVP,
                               'isPrch':isPrch
                             },
-         ) 
+              ) 
+        else: return render(request, 'myPipeline.html',
+                    context={
+                              'myNoteForm':myNoteForm,
+                              'myNoteContent':myNoteContent,
+                              'myPip':myPip    ,
+                              'myIP':myIP    ,
+                              'myTotalLoans':myTotalLoans  ,
+                              'salesQuote':salesQuote,
+                              'user_email':user_email,    
+                              'img_url':img_url, 
+                              'aePipeline_js':aePipeline,                                         
+                              'aePipeline_PreQual_js':aePipeline_PreQual,                                 
+                              'myteam':myteam,       
+                              'isAVP':isAVP,
+                              'isPrch':isPrch
+                            },
+              ) 
     else:       
        return  redirect('accounts/login/')
   

@@ -1,31 +1,52 @@
 import pyodbc 
 import pandas.io.sql as sql
 
-def get_AEPipeline(user_email):
+def get_AEPipeline(user_email,isPrch):
   #user_email = 'btaylor@newdayusa.com'
-  server = '10.203.1.105\\alpha' 
-  database = 'test_yang' 
-  username = 'webuser' 
-  password = 'Changeme1' 
-  cnxn = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
-  
-  query = """  
-    select LoanNum,
+	query = """ 
+	  select LoanNum,
 		   Score = case when Conv_Score_Group2 in ('Fair','Warm') then 'A' when Conv_Score_Group2 in ('Hot','On Fire') then 'AA' else 'AAA' end , 
 		   BorrName, LstStsDtCdDesc, convert(varchar, CurrentStsDate,110) CurrentStsDate, 
 		   datediff(DAY,CurrentStsDate,getdate()) as DaysInCurrentStatus,
 		   isnull(isnull(BorrPh,BorrMobilePh),' ') as BorrPh , 
 		   isnull(convert(varchar,LastCallTime,120),'NA') as LastCallTime,
 		   isnull(datediff(day,LastCallTime,getdate()),'14') as DaysSinceLastContact ,
-		   Comments
-    from DashboardReport_LoanStatus_1 
-    where AE_Email = 'aaa@aaa.com'
-  """
-  query = query.replace('aaa@aaa.com',user_email)  
+		   Comments 
+    from DashboardReport_LoanStatus_1  
+    where AE_Email = 'aaa@aaa.com' """	
 
-  queryResult = sql.read_sql(query, cnxn)
+	server = '10.203.1.105\\alpha' 
+	database = 'test_yang' 
+	username = 'webuser' 
+	password = "Changeme1"
+	cnxn = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)	
+	
+	if (isPrch): 
+	  query = """  
+     	select LoanNum,HmSt, 
+		   BorrName,
+			 CoBorrName, 
+			 LstStsDtCdDesc, 
+		   convert(varchar, CurrentStsDate,110) CurrentStsDate, 
+		   --datediff(DAY,CurrentStsDate,getdate()) as DaysInCurrentStatus,
+		   isnull(isnull(BorrPh,BorrMobilePh),' ') as BorrPh , 
+		   left(isnull(convert(varchar,LastCallTime,120),'NA'),10) as LastCallTime,
+		   --isnull(datediff(day,LastCallTime,getdate()),'14') as DaysSinceLastContact ,
+		   isnull(left(convert(varchar,NextExpirationDate,110),10),'NA') NextExpirationDate,
+		   NextExpirationDate_Name,		   
+		   isnull(left(convert(varchar,ContractExpirationDate,110),10),'NA') ContractExpirationDate,
+		   Comments   
+    	from DashboardReport_LoanStatus_1  
+    	where AE_Email = 'aaa@aaa.com'
+	"""		
+  
+	query = query.replace('aaa@aaa.com',user_email)  
+	queryResult = sql.read_sql(query, cnxn)
+	queryResult_PreQual = queryResult.drop(queryResult.index)
+	queryResult_PreQual = queryResult.loc[queryResult["LstStsDtCdDesc"].isin(["PRE QUAL ISSUED","PRE APPROVED"])]
+	queryResult = queryResult.loc[~queryResult["LstStsDtCdDesc"].isin(["PRE QUAL ISSUED","PRE APPROVED"])]
 
-  return queryResult.as_matrix().tolist()
+	return queryResult.as_matrix().tolist(),queryResult_PreQual.as_matrix().tolist()
   
 def get_TeamPipeline(user_email):
       #user_email = 'btaylor@newdayusa.com'
@@ -37,10 +58,9 @@ def get_TeamPipeline(user_email):
   
   query = """  
     select LoanNum,
-		   AccountExec,
 		   Score = case when Conv_Score_Group2 in ('Fair','Warm') then 'A' when Conv_Score_Group2 in ('Hot','On Fire') then 'AA' else 'AAA' end , 
 		   BorrName, LstStsDtCdDesc, convert(varchar, CurrentStsDate,110) CurrentStsDate, 
-		   
+		   datediff(DAY,CurrentStsDate,getdate()) as DaysInCurrentStatus,
 		   isnull(isnull(BorrPh,BorrMobilePh),' ') as BorrPh , 
 		   isnull(convert(varchar,LastCallTime,120),'NA') as LastCallTime,
 		   isnull(datediff(day,LastCallTime,getdate()),'14') as DaysSinceLastContact ,
