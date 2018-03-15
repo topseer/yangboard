@@ -82,7 +82,7 @@ def HomePage(request):
                       'Every brand isn’t for everybody, and everybody isn’t for every brand. – Liz Lange',
                       'The most unprofitable item ever manufactured is an excuse. – John Mason',
                       'Success is the culmination of failures, mistakes, false starts, confusion, and the determination to keep going anyway. – Nick Gleason',
-                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job. – Roy Bartell',
+                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job.',
                       'You dont close a sale; you open a relationship if you want to build a long-term, successful enterprise. – Patricia Fripp',
                       'If you are not taking care of your customer, your competitor will. – Bob Hooey',
                       'There are no shortcuts to any place worth going. – Beverly Sills',
@@ -341,7 +341,7 @@ def dashboard(request):
                       'Every brand isn’t for everybody, and everybody isn’t for every brand. – Liz Lange',
                       'The most unprofitable item ever manufactured is an excuse. – John Mason',
                       'Success is the culmination of failures, mistakes, false starts, confusion, and the determination to keep going anyway. – Nick Gleason',
-                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job. – Roy Bartell',
+                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job.',
                       'You dont close a sale; you open a relationship if you want to build a long-term, successful enterprise. – Patricia Fripp',
                       'If you are not taking care of your customer, your competitor will. – Bob Hooey',
                       'There are no shortcuts to any place worth going. – Beverly Sills',
@@ -490,7 +490,7 @@ def myPipeline(request):
                       'Every brand isn’t for everybody, and everybody isn’t for every brand. – Liz Lange',
                       'The most unprofitable item ever manufactured is an excuse. – John Mason',
                       'Success is the culmination of failures, mistakes, false starts, confusion, and the determination to keep going anyway. – Nick Gleason',
-                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job. – Roy Bartell',
+                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job.',
                       'You dont close a sale; you open a relationship if you want to build a long-term, successful enterprise. – Patricia Fripp',
                       'If you are not taking care of your customer, your competitor will. – Bob Hooey',
                       'There are no shortcuts to any place worth going. – Beverly Sills',
@@ -563,7 +563,7 @@ def my_team_member_pipeline(request,team_member_email):
           myNoteForm = NoteForm()
               
 
-        ae_pipeline_sum = AE_Pipeline_Count.get_AEPipeline_Count(user_email)
+        ae_pipeline_sum = AE_Pipeline_Count.get_AEPipeline_Count(user_email,isPrch)
 
         if len(ae_pipeline_sum)>0:
           myPip = ae_pipeline_sum["Pip"][0]            
@@ -575,8 +575,7 @@ def my_team_member_pipeline(request,team_member_email):
           myTotalLoans = 0
 
         #pipe
-        aePipeline = AE_Pipeline.get_AEPipeline(user_email)         
-        aePipeline_json = json.dumps(aePipeline)
+        aePipeline, aePipeline_PreQual= AE_Pipeline.get_AEPipeline(user_email,isPrch)                
         
         #pic
         img_url = 'img.jpg'
@@ -589,13 +588,15 @@ def my_team_member_pipeline(request,team_member_email):
                       'Every brand isn’t for everybody, and everybody isn’t for every brand. – Liz Lange',
                       'The most unprofitable item ever manufactured is an excuse. – John Mason',
                       'Success is the culmination of failures, mistakes, false starts, confusion, and the determination to keep going anyway. – Nick Gleason',
-                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job. – Roy Bartell',
+                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job.',
                       'You dont close a sale; you open a relationship if you want to build a long-term, successful enterprise. – Patricia Fripp',
                       'If you are not taking care of your customer, your competitor will. – Bob Hooey',
                       'There are no shortcuts to any place worth going. – Beverly Sills',
                       'Life’s battles don’t always go to the strongest or fastest; sooner or later those who win are those who think they can. – Richard Bach'
         ]
-        return render(request, 'myPipeline.html',
+        
+        if (isPrch): 
+              return render(request, 'myPipeline_prch.html',
                     context={
                               'myNoteForm':myNoteForm,
                               'myNoteContent':myNoteContent,
@@ -605,13 +606,31 @@ def my_team_member_pipeline(request,team_member_email):
                               'salesQuote':salesQuote,
                               'user_email':user_email,    
                               'img_url':img_url, 
-                              'aePipeline_js':aePipeline,
-                              'aePipeline_json':aePipeline_json,           
+                              'aePipeline_js':aePipeline,                                     
+                              'aePipeline_PreQual_js':aePipeline_PreQual,                                 
                               'myteam':myteam,       
                               'isAVP':isAVP,
                               'isPrch':isPrch
                             },
-         ) 
+              ) 
+        else: return render(request, 'myPipeline.html',
+                    context={
+                              'myNoteForm':myNoteForm,
+                              'myNoteContent':myNoteContent,
+                              'myPip':myPip    ,
+                              'myIP':myIP    ,
+                              'myTotalLoans':myTotalLoans  ,
+                              'salesQuote':salesQuote,
+                              'user_email':user_email,    
+                              'img_url':img_url, 
+                              'aePipeline_js':aePipeline,                                         
+                              'aePipeline_PreQual_js':aePipeline_PreQual,                                 
+                              'myteam':myteam,       
+                              'isAVP':isAVP,
+                              'isPrch':isPrch
+                            },
+              ) 
+      
     else:       
        return  redirect('accounts/login/')
 
@@ -657,7 +676,7 @@ def my_team_total_pipeline(request):
                       'Every brand isn’t for everybody, and everybody isn’t for every brand. – Liz Lange',
                       'The most unprofitable item ever manufactured is an excuse. – John Mason',
                       'Success is the culmination of failures, mistakes, false starts, confusion, and the determination to keep going anyway. – Nick Gleason',
-                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job. – Roy Bartell',
+                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job.',
                       'You dont close a sale; you open a relationship if you want to build a long-term, successful enterprise. – Patricia Fripp',
                       'If you are not taking care of your customer, your competitor will. – Bob Hooey',
                       'There are no shortcuts to any place worth going. – Beverly Sills',
@@ -983,7 +1002,7 @@ def equivalentRate(request):
                       'Every brand isn’t for everybody, and everybody isn’t for every brand. – Liz Lange',
                       'The most unprofitable item ever manufactured is an excuse. – John Mason',
                       'Success is the culmination of failures, mistakes, false starts, confusion, and the determination to keep going anyway. – Nick Gleason',
-                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job. – Roy Bartell',
+                      'Most people think selling is the same as talking. But the most effective salespeople know that listening is the most important part of their job.',
                       'You dont close a sale; you open a relationship if you want to build a long-term, successful enterprise. – Patricia Fripp',
                       'If you are not taking care of your customer, your competitor will. – Bob Hooey',
                       'There are no shortcuts to any place worth going. – Beverly Sills',
