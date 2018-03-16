@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^dashboard/', views.dashboard, name='dashboard'),           
     url(r'myPipeline/$', views.myPipeline, name='myPipeline'),    
     url(r'myTeamPipeline/$', views.my_team_total_pipeline, name='my_team_total_pipeline'),    
+    url(r'myTeamProspect/$', views.my_team_total_pipeline, name='my_team_total_pipeline'),    
     url(r'^$', views.HomePage, name='HomePage'),    
     ]
 

@@ -156,21 +156,18 @@
         };
 
      
-
+///////////pipeline table filter
         $('#btn-filter').on('click',function(){
-        $.fn.dataTable.ext.search.push(
-            
+        $.fn.dataTable.ext.search.push(            
             function(settings, data, dataIndex) 
             {
                 return $(table.row(dataIndex).node()).hasClass('condition1');                        
             }
-
         );
      
-            table.draw();            
-//            table_prequal.draw();
+            table.draw();   
+            table_prequal.draw();         
         });
-
 
 
         $('#btn-undo').on('click',function()
@@ -179,6 +176,28 @@
             table.draw();
             table_prequal.draw();
         }); 
+
+
+////////prospect table filter
+        $('#btn-filter_prequal').on('click',function(){
+        $.fn.dataTable.ext.search.push(
+            
+            function(settings, data, dataIndex) 
+            {
+                return $(table_prequal.row(dataIndex).node()).hasClass('condition2');                        
+            }
+        );            
+            table.draw();                 
+            table_prequal.draw();            
+        });
+
+        $('#btn-undo_prequal').on('click',function()
+        {
+            $.fn.dataTable.ext.search.pop();                        
+            table.draw();
+            table_prequal.draw();
+        }); 
+
 
        
 
@@ -238,6 +257,10 @@
                              $(row).addClass('condition1');
                          }                                                                                  
         
+                         if ( data[11] != "Good"){
+                            //  $(row).addClass('shown');
+                            // $(row).child( format(row.data()) ).show();
+                         }                              
                 },
             pageLength: 50,
             order: [[ 2, "asc" ],[ 3, "asc" ]],                                         
@@ -278,9 +301,9 @@
                              $( row ).find('td:eq(11)').addClass( "danger" );
                          } 
 
-                       // if ( data[11] != "Good"){
-                       //     $(row).addClass('condition1');
-                       // }                                                                                                                              
+                        if ( data[11] != "Good"){
+                            $(row).addClass('condition2');
+                        }                                                                                                                              
         
                 },
             pageLength: 50,

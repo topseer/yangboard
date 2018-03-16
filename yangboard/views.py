@@ -641,6 +641,9 @@ def my_team_total_pipeline(request):
     if request.user.is_authenticated:
         user = request.user
         user_email = user.email.lower()
+
+        ab_url = request.get_full_path()
+        
         isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()         
         isPrch = request.user.groups.filter(name__in=['Purchase']).exists()               
         myteam = get_myTeam.get_myTeam(user_email)    
@@ -650,7 +653,7 @@ def my_team_total_pipeline(request):
         myNoteContent = ""
         note_appointment = ""
             
-        ae_pipeline_sum = AE_Pipeline_Count.get_TeamPipeline_Count(user_email)
+        ae_pipeline_sum = AE_Pipeline_Count.get_TeamPipeline_Count(user_email,isPrch)
 
         if len(ae_pipeline_sum)>0:
           myPip = ae_pipeline_sum["Pip"][0]            
@@ -660,11 +663,16 @@ def my_team_total_pipeline(request):
           myPip = 0
           myIP = 0
           myTotalLoans = 0
-
+    
         #pipe
-        aePipeline = AE_Pipeline.get_TeamPipeline(user_email)         
-        aePipeline_json = json.dumps(aePipeline)
+        aePipeline,aePipeline_PreQual = AE_Pipeline.get_TeamPipeline(user_email,isPrch)                 
         
+        team_pipeline_content = "Pipeline"
+        if "myTeamProspect" in ab_url: 
+          aePipeline = aePipeline_PreQual
+          myPip = myIP
+          team_pipeline_content = 'Prospect'
+
         #pic
         img_url = 'img.jpg'
 
@@ -682,7 +690,8 @@ def my_team_total_pipeline(request):
                       'There are no shortcuts to any place worth going. – Beverly Sills',
                       'Life’s battles don’t always go to the strongest or fastest; sooner or later those who win are those who think they can. – Richard Bach'
         ]
-        return render(request, 'my_Team_Pipeline.html',
+        if (isPrch): 
+              return render(request, 'TeamPipeline_prch.html',
                     context={                              
                               'myNoteContent':myNoteContent,
                               'myPip':myPip    ,
@@ -691,13 +700,31 @@ def my_team_total_pipeline(request):
                               'salesQuote':salesQuote,
                               'user_email':user_email,    
                               'img_url':img_url, 
-                              'aePipeline_js':aePipeline,
-                              'aePipeline_json':aePipeline_json,           
+                              'aePipeline_js':aePipeline,                                     
+                              'aePipeline_PreQual_js':aePipeline_PreQual,                                 
                               'myteam':myteam,       
                               'isAVP':isAVP,
-                              'isPrch':isPrch
+                              'isPrch':isPrch,
+                              'team_pipeline_content':team_pipeline_content
                             },
-         ) 
+              ) 
+        else: return render(request, 'TeamPipeline_prch.html',
+                    context={                              
+                              'myNoteContent':myNoteContent,
+                              'myPip':myPip    ,
+                              'myIP':myIP    ,
+                              'myTotalLoans':myTotalLoans  ,
+                              'salesQuote':salesQuote,
+                              'user_email':user_email,    
+                              'img_url':img_url, 
+                              'aePipeline_js':aePipeline,                                         
+                              'aePipeline_PreQual_js':aePipeline_PreQual,                                 
+                              'myteam':myteam,       
+                              'isAVP':isAVP,
+                              'isPrch':isPrch,
+                              'team_pipeline_content':team_pipeline_content
+                            },
+              ) 
     else:       
        return  redirect('accounts/login/')
 
