@@ -13,6 +13,7 @@ from django.http import JsonResponse
 from . import forms
 from .forms import NameForm
 from .forms import NoteForm
+from .forms import Rev_Loan
 #from .forms import PeriodFilter
 from random import randint
 from django.views.generic import TemplateView
@@ -39,7 +40,7 @@ from .sqlData import datatrend_new
 from .sqlData import getEfficiency_new
 from .sqlData import ytd_data_new
 from .sqlData import loan_info 
-
+from .sqlData import Remove_Purchase_CRM
 
 lstRunTime = datetime(2018, 1, 2, 1, 1, 1, 1)
 global_getDivAverage = getDivAverage_new.getDivAverage ()   
@@ -449,6 +450,8 @@ def myPipeline(request):
         isPrch = request.user.groups.filter(name__in=['Purchase']).exists()               
 
         user_email = user.email.lower()        
+        user_name = user_email.lower().replace("@newdayusa.com", "")
+        
 
         myteam = get_myTeam.get_myTeam(user_email)
 
@@ -457,14 +460,17 @@ def myPipeline(request):
         note_appointment = ""
 
         if request.method == 'POST':                                
-          myNoteForm = NoteForm(request.POST)          
+          Rev_Loan_From = Rev_Loan(request.POST)          
           
-          if myNoteForm.is_valid():            
-            myNoteContent = myNoteForm.cleaned_data['note_title']
-            myNoteForm = NoteForm()
+          if Rev_Loan_From.is_valid():            
+            #myNoteContent = Rev_Loan_From.cleaned_data['note_title']
+            myNoteContent = list(request.POST)
+            if isAVP: Remove_Purchase_CRM.remove_PurchaseCRMLoan(myNoteContent)
+
+            Rev_Loan_From = Rev_Loan()
         
         else:
-          myNoteForm = NoteForm()
+          Rev_Loan_From = Rev_Loan()
               
         ae_pipeline_sum = AE_Pipeline_Count.get_AEPipeline_Count(user_email,isPrch)
 
@@ -500,13 +506,14 @@ def myPipeline(request):
         if (isPrch): 
               return render(request, 'myPipeline_prch.html',
                     context={
-                              'myNoteForm':myNoteForm,
+                              'Rev_Loan_From':Rev_Loan_From,
                               'myNoteContent':myNoteContent,
                               'myPip':myPip    ,
-                              'myIP':myIP    ,
+                              'myIP':myIP    ,                              
                               'myTotalLoans':myTotalLoans  ,
                               'salesQuote':salesQuote,
                               'user_email':user_email,    
+                              'user_name':user_name,
                               'img_url':img_url, 
                               'aePipeline_js':aePipeline,                                     
                               'aePipeline_PreQual_js':aePipeline_PreQual,                                 
@@ -517,13 +524,14 @@ def myPipeline(request):
               ) 
         else: return render(request, 'myPipeline.html',
                     context={
-                              'myNoteForm':myNoteForm,
+                              'Rev_Loan_From':Rev_Loan_From,
                               'myNoteContent':myNoteContent,
                               'myPip':myPip    ,
                               'myIP':myIP    ,
                               'myTotalLoans':myTotalLoans  ,
                               'salesQuote':salesQuote,
-                              'user_email':user_email,    
+                              'user_email':user_email,  
+                              'user_name':user_name,  
                               'img_url':img_url, 
                               'aePipeline_js':aePipeline,                                         
                               'aePipeline_PreQual_js':aePipeline_PreQual,                                 
@@ -547,20 +555,23 @@ def my_team_member_pipeline(request,team_member_email):
         myteam = get_myTeam.get_myTeam(user_email)    
 
         user_email = team_member_email.lower()
+        user_name = user_email.lower().replace("@newdayusa.com", "")
                     
         refresh_data(user_email)
-        myNoteContent = ""
-        note_appointment = ""
+        myNoteContent = ""        
 
         if request.method == 'POST':                                
-          myNoteForm = NoteForm(request.POST)          
+          Rev_Loan_From = Rev_Loan(request.POST)          
           
-          if myNoteForm.is_valid():            
-            myNoteContent = myNoteForm.cleaned_data['note_title']
-            myNoteForm = NoteForm()
+          if Rev_Loan_From.is_valid():            
+            #myNoteContent = Rev_Loan_From.cleaned_data['note_title']
+            myNoteContent = list(request.POST)
+            if isAVP: Remove_Purchase_CRM.remove_PurchaseCRMLoan(myNoteContent)
+
+            Rev_Loan_From = Rev_Loan()
         
         else:
-          myNoteForm = NoteForm()
+          Rev_Loan_From = Rev_Loan()
               
 
         ae_pipeline_sum = AE_Pipeline_Count.get_AEPipeline_Count(user_email,isPrch)
@@ -598,13 +609,14 @@ def my_team_member_pipeline(request,team_member_email):
         if (isPrch): 
               return render(request, 'myPipeline_prch.html',
                     context={
-                              'myNoteForm':myNoteForm,
+                              'Rev_Loan_From':Rev_Loan_From,
                               'myNoteContent':myNoteContent,
                               'myPip':myPip    ,
                               'myIP':myIP    ,
                               'myTotalLoans':myTotalLoans  ,
                               'salesQuote':salesQuote,
-                              'user_email':user_email,    
+                              'user_email':user_email,   
+                              'user_name':user_name, 
                               'img_url':img_url, 
                               'aePipeline_js':aePipeline,                                     
                               'aePipeline_PreQual_js':aePipeline_PreQual,                                 
@@ -615,13 +627,14 @@ def my_team_member_pipeline(request,team_member_email):
               ) 
         else: return render(request, 'myPipeline.html',
                     context={
-                              'myNoteForm':myNoteForm,
+                              'Rev_Loan_From':Rev_Loan_From,
                               'myNoteContent':myNoteContent,
                               'myPip':myPip    ,
                               'myIP':myIP    ,
                               'myTotalLoans':myTotalLoans  ,
                               'salesQuote':salesQuote,
                               'user_email':user_email,    
+                              'user_name':user_name,
                               'img_url':img_url, 
                               'aePipeline_js':aePipeline,                                         
                               'aePipeline_PreQual_js':aePipeline_PreQual,                                 
@@ -641,7 +654,7 @@ def my_team_total_pipeline(request):
     if request.user.is_authenticated:
         user = request.user
         user_email = user.email.lower()
-
+        user_name = user_email.lower().replace("@newdayusa.com", "")
         ab_url = request.get_full_path()
         
         isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()         
@@ -650,9 +663,24 @@ def my_team_total_pipeline(request):
         
                     
         refresh_data(user_email)
-        myNoteContent = ""
-        note_appointment = ""
-            
+        
+        myNoteContent = ""                      
+
+        if request.method == 'POST':                                
+          Rev_Loan_From = Rev_Loan(request.POST)          
+          
+          if Rev_Loan_From.is_valid():            
+            #myNoteContent = Rev_Loan_From.cleaned_data['note_title']
+            myNoteContent = list(request.POST)
+            if isAVP: Remove_Purchase_CRM.remove_PurchaseCRMLoan(myNoteContent)
+
+            Rev_Loan_From = Rev_Loan()
+        
+        else:
+          Rev_Loan_From = Rev_Loan()
+
+          
+
         ae_pipeline_sum = AE_Pipeline_Count.get_TeamPipeline_Count(user_email,isPrch)
 
         if len(ae_pipeline_sum)>0:
@@ -692,13 +720,15 @@ def my_team_total_pipeline(request):
         ]
         if (isPrch): 
               return render(request, 'TeamPipeline_prch.html',
-                    context={                              
+                    context={             
+                              'Rev_Loan_From':Rev_Loan_From,
                               'myNoteContent':myNoteContent,
                               'myPip':myPip    ,
                               'myIP':myIP    ,
                               'myTotalLoans':myTotalLoans  ,
                               'salesQuote':salesQuote,
-                              'user_email':user_email,    
+                              'user_email':user_email,  
+                              'user_name':user_name,  
                               'img_url':img_url, 
                               'aePipeline_js':aePipeline,                                     
                               'aePipeline_PreQual_js':aePipeline_PreQual,                                 
@@ -716,6 +746,7 @@ def my_team_total_pipeline(request):
                               'myTotalLoans':myTotalLoans  ,
                               'salesQuote':salesQuote,
                               'user_email':user_email,    
+                              'user_name':user_name,                              
                               'img_url':img_url, 
                               'aePipeline_js':aePipeline,                                         
                               'aePipeline_PreQual_js':aePipeline_PreQual,                                 
@@ -736,8 +767,9 @@ def my_team_total_pipeline(request):
 def my_team_member(request,team_member_email):
     if request.user.is_authenticated:
         
-        user_email = team_member_email
-        
+        user_email = team_member_email        
+        user_name = user_email.lower().replace("@newdayusa.com", "")
+
         isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()        
         myteam = get_myTeam.get_myTeam(user_email)
  
@@ -919,7 +951,8 @@ def my_team_member(request,team_member_email):
         return render(request, 'dashboard.html',
                     context={
                              'test_test':lstRunTime.day,
-                             'user_email':user_email,   
+                             'user_email':user_email,  
+                             'user_name':user_name, 
                              'img_url':img_url,     
                              'isAVP':isAVP,
                              'myteam':myteam,                     
@@ -1015,6 +1048,7 @@ def equivalentRate(request):
             
         user = request.user
         user_email = user.email.lower()
+        user_name = user_email.lower().replace("@newdayusa.com", "")
         
         isAVP = request.user.groups.filter(name__in=['avp','AVP']).exists()         
         myteam = get_myTeam.get_myTeam(user_email)
@@ -1038,7 +1072,8 @@ def equivalentRate(request):
         return render(request, 'app_equivalentrate.html',
                     context={                        
                              'salesQuote':salesQuote,
-                             'user_email':user_email,        
+                             'user_email':user_email,    
+                             'user_name':user_name,    
                              'isAVP':isAVP,
                              'myteam':myteam,      
                              

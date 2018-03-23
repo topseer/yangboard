@@ -5,19 +5,21 @@
         <div class="x_panel">
           <div class="x_title">
             <h2>
-                <i class="green">  {{myPip}} </i> Pipeline 
+                {{user_name}}: <i class="green">  {{myPip}} </i> Loans 
                 <!--<i class="red">  {{myPip}} </i> Pre-IP,  
-                <i class="blue"> {{myIP}} </i> In Processing -->&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{user_email}} {{myNoteContent}}
-                <!--
+                <i class="blue"> {{myIP}} </i> In Processing -->  &nbsp &nbsp &nbsp &nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
+                <!--{{myNoteContent}}
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(38, 185, 154, 0.8)">Just-Called</span> 
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(52, 152, 219, 0.8)">Called-This-Week</span> 
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(243, 156, 18, 0.8)">Warning</span> 
                 <span class="glyphicon glyphicon-stop text-success" style="color:rgba(231, 76, 60, 0.8)">Losing</span> 
                                 
-                -->                
+                
                 
                 <input type="button" id="btn-filter" value="Flagged Loans Only"/>
                 <input type="button" id="btn-undo" value="All Loans"/>
+                -->                
+                <input type="checkbox" id="flag_only" value="flag_only" onclick="filter_flag_loans()"/> Flag Loans Only
             </h2>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -37,7 +39,7 @@
                         <th>LoanNum</th>
                         <th>HmSt</th>
                         <th>BorrName</th>
-                        <th>CoBorrName</th>
+                        <th>AE</th>
                         <th>LstSts</th>
                         <th>Sts Date</th>                        
                         <th>BorrPh</th>
@@ -53,16 +55,14 @@
           </div>
         </div>   
         
- 
 
         <div class="x_panel">
                 <div class="x_title">
                   <h2>
-                      <i class="red">  {{myIP}} </i> Prospects
+                      {{user_name}}: <i class="red">  {{myIP}} </i> Prospects
                       <!--<i class="red">  {{myPip}} </i> Pre-IP,  
-                      <i class="blue"> {{myIP}} </i> In Processing -->&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{user_email}} {{myNoteContent}}
-                      <input type="button" id="btn-filter_prequal" value="Flagged Loans Only"/>
-                      <input type="button" id="btn-undo_prequal" value="All Loans"/>                                
+                      <i class="blue"> {{myIP}} </i> In Processing -->&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  {{myNoteContent}}
+                      <input type="checkbox" id="flag_only_1" value="flag_only" onclick="filter_flag_loans_1()"/> Flag Prospects Only
                   </h2>
                   <ul class="nav navbar-right panel_toolbox">
                     
@@ -83,7 +83,7 @@
                               <th>LoanNum</th>
                               <th>HmSt</th>
                               <th>BorrName</th>
-                              <th>CoBorrName</th>
+                              <th>AE</th>
                               <th>LstSts</th>
                               <th>Sts Date</th>                        
                               <th>BorrPh</th>

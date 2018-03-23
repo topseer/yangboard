@@ -98,7 +98,7 @@ def get_TeamPipeline(user_email,isPrch):
 	  query = """  
      	select LoanNum,HmSt, 
 		   BorrName,
-			 CoBorrName, 
+			 AccountExec, 
 			 LstStsDtCdDesc, 
 		   convert(varchar, CurrentStsDate,110) CurrentStsDate, 
 		   --datediff(DAY,CurrentStsDate,getdate()) as DaysInCurrentStatus,

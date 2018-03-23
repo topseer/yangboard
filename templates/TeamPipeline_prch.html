@@ -150,10 +150,15 @@
                         '<td>CRM:</td>'+
                         '<td>'+ d[11]    +'</td>'+
                     '</tr>'+                    
-                '</table>'
+                '</table>'+
+                '<form  method="post" class="pull-mid" action ="." > ' +
+                    '<input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken">'+
+                    '{{ Rev_Loan_From|linebreaks }} '+                    
+                    '<input type="submit" name =' +d[0]+' value="Clear Flags" />'+
+                '</form>'                
         };
 
-     
+/*button version     
 ///////////pipeline table filter
         $('#btn-filter').on('click',function()
         {                        
@@ -198,7 +203,25 @@
             table_prequal.draw();
         }); 
 
+*/
 
+        function filter_flag_loans() {
+            var checkBox = document.getElementById("flag_only");            
+            if (checkBox.checked == true) {
+                $.fn.dataTable.ext.search.push(            
+                function(settings, data, dataIndex) 
+                {
+                    return $(table.row(dataIndex).node()).hasClass('condition1');                        
+                }
+                );     
+                table.draw();   
+                table_prequal.draw();  
+            } else {
+                $.fn.dataTable.ext.search.pop();                        
+                table.draw();
+                table_prequal.draw();
+            }
+        }
        
 
         var table = $('#datatable-fixed-header').DataTable({                
@@ -209,7 +232,7 @@
                 { title: "LoanNum"},                                       
                 { title: "HmSt" },
                 { title: "Borr_Name" },
-                { title: "CoBorr_Name" },
+                { title: "AE" },
                 { title: "LstSts" },
                 { title: "Satus_Date" },                
                 { title: "BorrPh" },
@@ -237,7 +260,6 @@
                     //         $( row ).find('td:eq(7)').addClass( "danger" );
                     //     }
    
-
                      // different color by WallStreet
                          if ( data[11] == "Good" ) {                
                              $( row ).find('td:eq(11)').addClass( "success" );
@@ -258,51 +280,6 @@
             order: [[ 2, "asc" ],[ 3, "asc" ]],                                         
         });         
 
-
-
-        //pre-qual
-        var table_prequal = $('#datatable-prequals').DataTable({                
-            fixedHeader: true,
-            data: aePipeData2,
-            responsive: false,                                
-            columns: [                                          
-                { title: "LoanNum"},                                       
-                { title: "HmSt" },
-                { title: "Borr_Name" },
-                { title: "CoBorr_Name" },
-                { title: "LstSts" },
-                { title: "Satus_Date" },                
-                { title: "BorrPh" },
-                { title: "Last_Call" },                
-                { title: "Nxt_Exp_Dt" },
-                { title: "Net_Exp_Nm" },
-                { title: "Contract_Exp_Dt" },
-                {
-                "className":      'details-control',
-                "orderable":      false,
-                "data":           null,
-                "defaultContent": ''
-                },                
-                ],
-            "createdRow": function ( row, data, index ) 
-                {
-                         
-                         if ( data[11] == "Good" ) {                
-                             $( row ).find('td:eq(11)').addClass( "success" );
-                         } else if ( data[9] != "Good" ) {                                            
-                             $( row ).find('td:eq(11)').addClass( "danger" );
-                         } 
-
-                        if ( data[11] != "Good"){
-                            $(row).addClass('condition2');
-                        }                                                                                                                              
-        
-                },
-            pageLength: 50,
-            order: [[ 2, "asc" ],[ 3, "asc" ]],                                         
-        }); 
-
-
         // Add event listener for opening and closing details
         $('#datatable-fixed-header tbody').on('click', 'td.details-control', function () 
         {
@@ -320,24 +297,7 @@
                 tr.addClass('shown');
             }
         });
-        
-        $('#datatable-prequals tbody').on('click', 'td.details-control', function () 
-        {
-            var tr = $(this).closest('tr');
-            var row = table_prequal.row( tr );
-    
-            if ( row.child.isShown() ) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-                // Open this row
-                row.child( format(row.data()) ).show();
-                tr.addClass('shown');
-            }
-        });
-        
+ 
       
     </script>    
  

@@ -7,10 +7,13 @@
             <h2>
                 <i class="green">  {{myPip}} </i> {{ team_pipeline_content }} 
                 <!--<i class="red">  {{myPip}} </i> Pre-IP,  
-                <i class="blue"> {{myIP}} </i> In Processing -->&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{user_email}} {{myNoteContent}}
-                           
+                <i class="blue"> {{myIP}} </i> In Processing -->&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
+                
+                <!-- {{myNoteContent}}
                 <input type="button" id="btn-filter" value="Flagged Loans Only"/>
                 <input type="button" id="btn-undo" value="All Loans"/>
+                -->
+                <input type="checkbox" id="flag_only" value="flag_only" onclick="filter_flag_loans()"/> Flag Loans Only
             </h2>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>

@@ -29,12 +29,14 @@ class RenewBookForm(forms.Form):
 class NameForm(forms.Form):    
     your_name = forms.CharField(label='Name', max_length=100)    
 
-
-
+   
 class NoteForm(forms.Form):    
     note_title = forms.CharField(label='New Note Title', max_length=100)            
     note_appointment = forms.DateField(label='Appointment Date',initial=datetime.date.today)                                                                
     note_details = forms.CharField(label='Note Details')        
+
+class Rev_Loan(forms.Form):    
+    note_title = forms.CharField(label='New Note Title', max_length=100,widget = forms.HiddenInput(), required = False)                
 
 
 
