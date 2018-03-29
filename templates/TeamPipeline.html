@@ -71,9 +71,12 @@
           {% include "topNav.html" %} 
           <!-- /top navigation -->
 
+
           <!-- content_myPipeline -->
-          {% include "content_myPipeline_prch.html" %} 
-          <!-- /content_myPipeline -->    
+          {% include "content_TeamPipeline.html" %} 
+          <!-- /content_myPipeline -->
+
+    
  
           <!-- footer  -->
           {% include "footer_bottom.html" %} 
@@ -152,32 +155,56 @@
                     '<input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken">'+
                     '{{ Rev_Loan_From|linebreaks }} '+                    
                     '<input type="submit" name =' +d[0]+' value="Clear Flags" />'+
-                '</form>'
+                '</form>'                
         };
 
-     
-/*button version
-        $('#btn-filter').on('click',function(){
-        $.fn.dataTable.ext.search.push(            
-            function(settings, data, dataIndex) 
-            {
-                return $(table.row(dataIndex).node()).hasClass('condition1');                        
-            }
-        );
-     
+/*button version     
+///////////pipeline table filter
+        $('#btn-filter').on('click',function()
+        {                        
+            $.fn.dataTable.ext.search.push(      
+                                            
+                function(settings, data, dataIndex) 
+                {
+                    return $(table.row(dataIndex).node()).hasClass('condition1');                        
+                }
+            );
+        
             table.draw();   
             table_prequal.draw();         
         });
-        
+
         $('#btn-undo').on('click',function()
         {
-            $.fn.dataTable.ext.search.pop();                        
+            $.fn.dataTable.ext.search.pop()                                    
             table.draw();
             table_prequal.draw();
         }); 
+
+
+////////prospect table filter
+        $('#btn-filter_prequal').on('click',function()
+        {                                         
+            $.fn.dataTable.ext.search.push(
+                
+                function(settings, data, dataIndex) 
+                {
+                    return $(table_prequal.row(dataIndex).node()).hasClass('condition2');                        
+                }
+            );            
+            table.draw();                 
+            table_prequal.draw();            
+        });
+
+        $('#btn-undo_prequal').on('click',function()
+        {
+            $.fn.dataTable.ext.search.pop()                                                          
+            table.draw();
+            table_prequal.draw();
+        }); 
+
 */
 
-///pipeline filter
         function filter_flag_loans() {
             var checkBox = document.getElementById("flag_only");            
             if (checkBox.checked == true) {
@@ -195,27 +222,7 @@
                 table_prequal.draw();
             }
         }
-
-///prospect filter
-        function filter_flag_loans_1() {
-            var checkBox = document.getElementById("flag_only_1");            
-            if (checkBox.checked == true) {
-                $.fn.dataTable.ext.search.push(            
-                function(settings, data, dataIndex) 
-                {
-                    return $(table_prequal.row(dataIndex).node()).hasClass('condition2');                        
-                }
-                );     
-                table.draw();   
-                table_prequal.draw();  
-            } else {
-                $.fn.dataTable.ext.search.pop();                        
-                table.draw();
-                table_prequal.draw();
-            }
-        }
-
-
+       
 
         var table = $('#datatable-fixed-header').DataTable({                
             fixedHeader: true,
@@ -225,14 +232,14 @@
                 { title: "LoanNum"},                                       
                 { title: "HmSt" },
                 { title: "Borr_Name" },
-                { title: "CoBorr_Name" },
+                { title: "AE" },
+                { title: "Processor" },
                 { title: "LstSts" },
                 { title: "Satus_Date" },                
-                { title: "BorrPh" },
-                { title: "Last_Call" },                
-                { title: "Nxt_Exp_Dt" },
-                { title: "Net_Exp_Nm" },
-                { title: "Contract_Exp_Dt" },
+                { title: "DaysInStatus" },                
+                { title: "Last_Call" },                                
+                { title: "No_Call_Days" },
+                { title: "WallStreet" },
                 {
                 "className":      'details-control',
                 "orderable":      false,
@@ -242,17 +249,17 @@
             ],
             "createdRow": function ( row, data, index ) 
                 {
-       
-                    
-                    // // different color by WallStreet
-                    //     if ( data[1] == "AAA" ) {                
-                    //         $( row ).find('td:eq(1)').addClass( "success" );
-                    //     } else if ( data[1] == "AA" ) {                
-                    //         $( row ).find('td:eq(1)').addClass( "info" );
-                    //     } else if ( data[1] == "A" ) {                
-                    //         $( row ).find('td:eq(1)').addClass( "warning" );
-                    //     }     
-
+                    // different color by Last Contact Date
+                    //     if ( data[8] <= 2 ) {                
+                    //         $( row ).find('td:eq(7)').addClass( "success" );
+                    //     } else if (data[8] <= 7)           {
+                    //         $( row ).find('td:eq(7)').addClass( "info" );
+                    //     } else if (data[8] <= 14)            {
+                    //         $( row ).find('td:eq(7)').addClass( "warning" );
+                    //     } else              {
+                    //         $( row ).find('td:eq(7)').addClass( "danger" );
+                    //     }
+   
                      // different color by WallStreet
                          if ( data[11] == "Good" ) {                
                              $( row ).find('td:eq(11)').addClass( "success" );
@@ -260,63 +267,18 @@
                              $( row ).find('td:eq(11)').addClass( "danger" );
                          }
 
-                        if ( data[11] != "Good"){
+                         if ( data[11] != "Good"){
                              $(row).addClass('condition1');
                          }                                                                                  
         
                          if ( data[11] != "Good"){
-                            //  $(row).addClass('shown');
+                            // $(row).addClass('shown');
                             // $(row).child( format(row.data()) ).show();
                          }                              
                 },
             pageLength: 50,
             order: [[ 2, "asc" ],[ 3, "asc" ]],                                         
         });         
-
-
-
-        //pre-qual
-        var table_prequal = $('#datatable-prequals').DataTable({                
-            fixedHeader: true,
-            data: aePipeData2,
-            responsive: false,                                
-            columns: [                                          
-                { title: "LoanNum"},                                       
-                { title: "HmSt" },
-                { title: "Borr_Name" },
-                { title: "CoBorr_Name" },
-                { title: "LstSts" },
-                { title: "Satus_Date" },                
-                { title: "BorrPh" },
-                { title: "Last_Call" },                
-                { title: "Nxt_Exp_Dt" },
-                { title: "Net_Exp_Nm" },
-                { title: "Contract_Exp_Dt" },
-                {
-                "className":      'details-control',
-                "orderable":      false,
-                "data":           null,
-                "defaultContent": ''
-                },                
-                ],
-            "createdRow": function ( row, data, index ) 
-                {
-                         
-                         if ( data[11] == "Good" ) {                
-                             $( row ).find('td:eq(11)').addClass( "success" );
-                         } else if ( data[9] != "Good" ) {                                            
-                             $( row ).find('td:eq(11)').addClass( "danger" );
-                         } 
-
-                        if ( data[11] != "Good"){
-                            $(row).addClass('condition2');
-                        }                                                                                                                              
-        
-                },
-            pageLength: 50,
-            order: [[ 2, "asc" ],[ 3, "asc" ]],                                         
-        }); 
-
 
         // Add event listener for opening and closing details
         $('#datatable-fixed-header tbody').on('click', 'td.details-control', function () 
@@ -335,24 +297,7 @@
                 tr.addClass('shown');
             }
         });
-        
-        $('#datatable-prequals tbody').on('click', 'td.details-control', function () 
-        {
-            var tr = $(this).closest('tr');
-            var row = table_prequal.row( tr );
-    
-            if ( row.child.isShown() ) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-                // Open this row
-                row.child( format(row.data()) ).show();
-                tr.addClass('shown');
-            }
-        });
-        
+ 
       
     </script>    
  

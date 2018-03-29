@@ -1,7 +1,7 @@
 import pyodbc 
 import pandas.io.sql as sql
 
-def remove_PurchaseCRMLoan(all_loans):
+def remove_CO_CRMLoan(all_loans):
   #user_email = 'btaylor@newdayusa.com'
   server = '10.203.1.105\\alpha' 
   database = 'test_yang' 
@@ -13,21 +13,21 @@ def remove_PurchaseCRMLoan(all_loans):
   for i in all_loans:
     sql_code = """ 
       if exists (
-      select * from DashboardReport_LoanStatus_Purchase_CRMs
+      select * from DashboardReport_LoanStatus_CO_CRMs
       where loannum = 'abcdefg'
       ) 
       begin
-        insert into DashboardReport_LoanStatus_Purchase_CRMs_Exceptions
-        select * from DashboardReport_LoanStatus_Purchase_CRMs
+        insert into DashboardReport_LoanStatus_CO_CRMs_Exceptions
+        select * from DashboardReport_LoanStatus_CO_CRMs
         where loannum = 'abcdefg'
       end
       else begin
-        insert into DashboardReport_LoanStatus_Purchase_CRMs_Exceptions
+        insert into DashboardReport_LoanStatus_CO_CRMs_Exceptions
         select 'abcdefg','Good'  
       end      
 
-      delete DashboardReport_LoanStatus_Purchase_CRMs_Exceptions
-      where LoanNum in ('csrfmiddlewaretoken','note_title')
+      delete DashboardReport_LoanStatus_CO_CRMs_Exceptions
+      where LoanNum in ('csrfmiddlewaretoken','note_title'); 
 
       update DashboardReport_LoanStatus_1
         set Comments = 'Good',
@@ -36,7 +36,7 @@ def remove_PurchaseCRMLoan(all_loans):
         Comments3='',
         Comments4='',
         Comments5=''	
-      where LoanNum  = 'abcdefg'       
+      where LoanNum  = 'abcdefg'     
     """
     sql_code = sql_code.replace('abcdefg',i)  
     cursor = cnxn.cursor()

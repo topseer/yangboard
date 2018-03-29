@@ -12,9 +12,9 @@ def get_AEPipeline_Count(user_email,isPrch):
   query = """  
         with Abcd as (  
         select a.AE_PersonID as PersonID, b.Email,
-            sum(case when PreInProcessDtm is not null and ApprOrdDate is not null and InProcessDate is null then 1 else 0 end) as Pip,
+            sum(case when PreInProcessDtm is not null and LstStsDtCdDesc != 'NOIS' then 1 else 0 end) as Pip,
             sum(case when PreInProcessDtm is not null and ApprOrdDate is not null and InProcessDate is null then LoanAmt else 0 end) as Pip_LoanAMT,
-            sum(case when InProcessDate is not null then 1 else 0 end) as IP,
+            sum(case when PreInProcessDtm is null or LstStsDtCdDesc = 'NOIS' then 1 else 0 end) as IP,
             sum(case when InProcessDate is not null then LoanAmt else 0 end) as IP_LoanAmt	   ,   
 			      count(*) as TotalLoans
         from DashboardReport_LoanStatus_1 as a 
@@ -70,11 +70,11 @@ def get_TeamPipeline_Count(user_email,isPrch):
   query = """  
         with Abcd as (  
         select a.AE_PersonID as PersonID, b.Email,
-            sum(case when PreInProcessDtm is not null and ApprOrdDate is not null and InProcessDate is null then 1 else 0 end) as Pip,
+            sum(case when PreInProcessDtm is not null  and LstStsDtCdDesc != 'NOIS' then 1 else 0 end) as Pip,
             sum(case when PreInProcessDtm is not null and ApprOrdDate is not null and InProcessDate is null then LoanAmt else 0 end) as Pip_LoanAMT,
-            sum(case when InProcessDate is not null then 1 else 0 end) as IP,
+            sum(case when PreInProcessDtm is null  or LstStsDtCdDesc = 'NOIS' then 1 else 0 end) as IP,
             sum(case when InProcessDate is not null then LoanAmt else 0 end) as IP_LoanAmt	   ,   
-			  count(*) as TotalLoans
+			      count(*) as TotalLoans
         from DashboardReport_LoanStatus_1 as a 
         inner join topDownAELookupTable as b 
         on a.AE_PersonID = b.PersonId

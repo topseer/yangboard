@@ -41,6 +41,7 @@ from .sqlData import getEfficiency_new
 from .sqlData import ytd_data_new
 from .sqlData import loan_info 
 from .sqlData import Remove_Purchase_CRM
+from .sqlData import Remove_CO_CRM
 
 lstRunTime = datetime(2018, 1, 2, 1, 1, 1, 1)
 global_getDivAverage = getDivAverage_new.getDivAverage ()   
@@ -318,7 +319,7 @@ def dashboard(request):
         CO_CLose_Diff =  round( (CO_CLose - BM_CO_CLose)/ BM_CO_CLose * 100,1)
         
 
-        ae_pipeline_sum = AE_Pipeline_Count.get_AEPipeline_Count(user_email)
+        ae_pipeline_sum = AE_Pipeline_Count.get_AEPipeline_Count(user_email,isPrch)
 
         if len(ae_pipeline_sum)>0:
           myPip = ae_pipeline_sum["Pip"][0]            
@@ -330,7 +331,7 @@ def dashboard(request):
           myTotalLoans = 2
 
         #pipe
-        aePipeline = AE_Pipeline.get_AEPipeline(user_email)         
+        aePipeline = AE_Pipeline.get_AEPipeline(user_email,isPrch)         
         aePipeline_json = json.dumps(aePipeline)
         
         #pic
@@ -456,8 +457,7 @@ def myPipeline(request):
         myteam = get_myTeam.get_myTeam(user_email)
 
         refresh_data(user_email)
-        myNoteContent = ""
-        note_appointment = ""
+        myNoteContent = ""        
 
         if request.method == 'POST':                                
           Rev_Loan_From = Rev_Loan(request.POST)          
@@ -465,8 +465,9 @@ def myPipeline(request):
           if Rev_Loan_From.is_valid():            
             #myNoteContent = Rev_Loan_From.cleaned_data['note_title']
             myNoteContent = list(request.POST)
-            if isAVP: Remove_Purchase_CRM.remove_PurchaseCRMLoan(myNoteContent)
-
+            if isAVP: 
+              Remove_Purchase_CRM.remove_PurchaseCRMLoan(myNoteContent)
+              Remove_CO_CRM.remove_CO_CRMLoan(myNoteContent)                  
             Rev_Loan_From = Rev_Loan()
         
         else:
@@ -566,7 +567,9 @@ def my_team_member_pipeline(request,team_member_email):
           if Rev_Loan_From.is_valid():            
             #myNoteContent = Rev_Loan_From.cleaned_data['note_title']
             myNoteContent = list(request.POST)
-            if isAVP: Remove_Purchase_CRM.remove_PurchaseCRMLoan(myNoteContent)
+            if isAVP: 
+                Remove_Purchase_CRM.remove_PurchaseCRMLoan(myNoteContent)
+                Remove_CO_CRM.remove_CO_CRMLoan(myNoteContent)                  
 
             Rev_Loan_From = Rev_Loan()
         
@@ -672,7 +675,9 @@ def my_team_total_pipeline(request):
           if Rev_Loan_From.is_valid():            
             #myNoteContent = Rev_Loan_From.cleaned_data['note_title']
             myNoteContent = list(request.POST)
-            if isAVP: Remove_Purchase_CRM.remove_PurchaseCRMLoan(myNoteContent)
+            if isAVP: 
+              Remove_Purchase_CRM.remove_PurchaseCRMLoan(myNoteContent)
+              Remove_CO_CRM.remove_CO_CRMLoan(myNoteContent)                  
 
             Rev_Loan_From = Rev_Loan()
         
@@ -694,13 +699,19 @@ def my_team_total_pipeline(request):
     
         #pipe
         aePipeline,aePipeline_PreQual = AE_Pipeline.get_TeamPipeline(user_email,isPrch)                 
-        
-        team_pipeline_content = "Pipeline"
-        if "myTeamProspect" in ab_url: 
-          aePipeline = aePipeline_PreQual
-          myPip = myIP
-          team_pipeline_content = 'Prospect'
 
+        if isPrch:        
+          team_pipeline_content = "Pipeline"
+          if "myTeamProspect" in ab_url: 
+            aePipeline = aePipeline_PreQual
+            myPip = myIP
+            team_pipeline_content = 'Prospect'
+        else:
+          team_pipeline_content = "After PreIP"
+          if "myTeamProspect" in ab_url: 
+            aePipeline = aePipeline_PreQual
+            myPip = myIP
+            team_pipeline_content = 'Before PreIP'
         #pic
         img_url = 'img.jpg'
 
@@ -738,7 +749,7 @@ def my_team_total_pipeline(request):
                               'team_pipeline_content':team_pipeline_content
                             },
               ) 
-        else: return render(request, 'TeamPipeline_prch.html',
+        else: return render(request, 'TeamPipeline.html',
                     context={                              
                               'myNoteContent':myNoteContent,
                               'myPip':myPip    ,

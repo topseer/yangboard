@@ -4,14 +4,17 @@ import pandas.io.sql as sql
 def get_AEPipeline(user_email,isPrch):
   #user_email = 'btaylor@newdayusa.com'
 	query = """ 
-	  select LoanNum,
-		   Score = case when Conv_Score_Group2 in ('Fair','Warm') then 'A' when Conv_Score_Group2 in ('Hot','On Fire') then 'AA' else 'AAA' end , 
-		   BorrName, LstStsDtCdDesc, convert(varchar, CurrentStsDate,110) CurrentStsDate, 
+     	select LoanNum,HmSt, 
+			 BorrName,
+			 isnull(Processor,'') Processor, 
+			 LstStsDtCdDesc, 
+		   convert(varchar, CurrentStsDate,110) CurrentStsDate, 
 		   datediff(DAY,CurrentStsDate,getdate()) as DaysInCurrentStatus,
 		   isnull(isnull(BorrPh,BorrMobilePh),' ') as BorrPh , 
-		   isnull(convert(varchar,LastCallTime,120),'NA') as LastCallTime,
-		   isnull(datediff(day,LastCallTime,getdate()),'14') as DaysSinceLastContact ,
-		   Comments 
+		   left(isnull(convert(varchar,LastCallTime,120),'NA'),10) as LastCallTime,		   
+		   isnull(datediff(day,LastCallTime,getdate()),'14') as DaysSinceLastContact,
+		   Score = case when Conv_Score_Group2 in ('Fair','Warm') then 'A' when Conv_Score_Group2 in ('Hot','On Fire') then 'AA' else 'AAA' end ,		   		   
+		   Comments
     from DashboardReport_LoanStatus_1  
     where AE_Email = 'aaa@aaa.com' """	
 
@@ -39,12 +42,12 @@ def get_AEPipeline(user_email,isPrch):
     	from DashboardReport_LoanStatus_1  
     	where AE_Email = 'aaa@aaa.com'
 	"""		
-  
+
 	query = query.replace('aaa@aaa.com',user_email)  
 	queryResult = sql.read_sql(query, cnxn)
 	queryResult_PreQual = queryResult.drop(queryResult.index)
-	queryResult_PreQual = queryResult.loc[queryResult["LstStsDtCdDesc"].isin(["PRE QUAL ISSUED","PRE APPROVED"])]
-	queryResult = queryResult.loc[~queryResult["LstStsDtCdDesc"].isin(["PRE QUAL ISSUED","PRE APPROVED"])]
+	queryResult_PreQual = queryResult.loc[queryResult["LstStsDtCdDesc"].isin(["PITCHED","PRE QUAL ISSUED","PRE APPROVED",'NOIS','INITIAL DISCLOSURES SENT','APPLICATION'])]
+	queryResult = queryResult.loc[~queryResult["LstStsDtCdDesc"].isin(["PITCHED","PRE QUAL ISSUED","PRE APPROVED",'NOIS','INITIAL DISCLOSURES SENT','APPLICATION'])]
 
 	return queryResult.as_matrix().tolist(),queryResult_PreQual.as_matrix().tolist()
   
@@ -57,14 +60,18 @@ def get_TeamPipeline(user_email,isPrch):
   cnxn = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
   
   query = """  
-    select LoanNum,
-		   Score = case when Conv_Score_Group2 in ('Fair','Warm') then 'A' when Conv_Score_Group2 in ('Hot','On Fire') then 'AA' else 'AAA' end , 
-		   BorrName, LstStsDtCdDesc, convert(varchar, CurrentStsDate,110) CurrentStsDate, 
-		   datediff(DAY,CurrentStsDate,getdate()) as DaysInCurrentStatus,
-		   isnull(isnull(BorrPh,BorrMobilePh),' ') as BorrPh , 
-		   isnull(convert(varchar,LastCallTime,120),'NA') as LastCallTime,
-		   isnull(datediff(day,LastCallTime,getdate()),'14') as DaysSinceLastContact ,
-		   Comments,AE_Email,AE_PersonID
+     	select LoanNum,
+			 HmSt, 
+		   BorrName,
+			 AccountExec, 
+			 isnull(Processor,'') Processor,
+			 LstStsDtCdDesc, 
+		   convert(varchar, CurrentStsDate,110) CurrentStsDate, 
+		   datediff(DAY,CurrentStsDate,getdate()) as DaysInCurrentStatus,		   
+		   left(isnull(convert(varchar,LastCallTime,120),'NA'),10) as LastCallTime,
+		   isnull(datediff(day,LastCallTime,getdate()),'14') as DaysSinceLastContact ,		   		   
+		   Score = case when Conv_Score_Group2 in ('Fair','Warm') then 'A' when Conv_Score_Group2 in ('Hot','On Fire') then 'AA' else 'AAA' end ,			 
+		   Comments      
     from DashboardReport_LoanStatus_1  as a 
 	  where a.AE_PersonID in (
  
@@ -143,8 +150,8 @@ def get_TeamPipeline(user_email,isPrch):
 
   queryResult = sql.read_sql(query, cnxn)
   queryResult_PreQual = queryResult.drop(queryResult.index)
-  queryResult_PreQual = queryResult.loc[queryResult["LstStsDtCdDesc"].isin(["PRE QUAL ISSUED","PRE APPROVED"])]
-  queryResult = queryResult.loc[~queryResult["LstStsDtCdDesc"].isin(["PRE QUAL ISSUED","PRE APPROVED"])]
+  queryResult_PreQual = queryResult.loc[queryResult["LstStsDtCdDesc"].isin(["PITCHED","PRE QUAL ISSUED","PRE APPROVED",'NOIS','INITIAL DISCLOSURES SENT','APPLICATION'])]
+  queryResult = queryResult.loc[~queryResult["LstStsDtCdDesc"].isin(["PITCHED","PRE QUAL ISSUED","PRE APPROVED",'NOIS','INITIAL DISCLOSURES SENT','APPLICATION'])]
 	
   return queryResult.as_matrix().tolist(),queryResult_PreQual.as_matrix().tolist()
   

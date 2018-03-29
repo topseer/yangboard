@@ -22,13 +22,13 @@
                     <div class="menu_section">
                             <ul class="nav side-menu">
                             <li>
-                                <a><i class="fa fa-area-chart"></i>My Reports<span class="fa fa-chevron-down"></span>
+                                <a><i class="fa fa-area-chart"></i>My Loans<span class="fa fa-chevron-down"></span>
                                 </a>
                                 <ul class="nav child_menu">
-                                  {% if not isPrch %}
+                                  <!-- {% if not isPrch %}
                                   <li><a href="/dashboard/">Dashboard</a></li>
-                                  {% endif %}
-                                  <li><a href="/myPipeline/">myPipeline</a></li>
+                                  {% endif %} -->
+                                  <li><a href="/myPipeline/">My Loans</a></li>
                                   
                         
                                   <!--
@@ -42,9 +42,9 @@
                                 </ul>
                             </li>        
 
-                            {% if isAVP %}
+                            {% if isAVP and isPrch %}
                             <li>
-                              <a><i class="fa fa-area-chart"></i>My Team's Pipeline<span class="fa fa-chevron-down"></span>
+                              <a><i class="fa fa-area-chart"></i>My Team's Loans<span class="fa fa-chevron-down"></span>
                               </a>
                               <ul class="nav child_menu">
                                 <li><a href="/myTeamPipeline/">___Team Pipeline___</a></li>
@@ -58,6 +58,20 @@
 
                             {% if isAVP and not isPrch %}
                             <li>
+                              <a><i class="fa fa-area-chart"></i>My Team's Pipeline<span class="fa fa-chevron-down"></span>
+                              </a>
+                              <ul class="nav child_menu">
+                                <li><a href="/myTeamPipeline/">___Team After PreIP___</a></li>
+                                <li><a href="/myTeamProspect/">___Team Before PreIP__</a></li>
+                                {% for name in myteam %}
+                                <li><a href="/myPipeline/myteam/{{name.1}}">{{name.0}}</a></li>                          
+                                {% endfor %}
+                              </ul>
+                            </li>                                 
+                            {% endif %}
+
+                            <!-- {% if isAVP and not isPrch %}
+                            <li>
                               <a><i class="fa fa-area-chart"></i>My Team's Dashboard<span class="fa fa-chevron-down"></span>
                               </a>
                               <ul class="nav child_menu">
@@ -66,7 +80,7 @@
                                 {% endfor %}
                               </ul>
                             </li>                                 
-                            {% endif %}
+                            {% endif %} -->
                                 
                             </ul>
                     </div>
